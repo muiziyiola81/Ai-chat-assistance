@@ -1,0 +1,7 @@
+{
+  "name": "GPT Hub",
+  "description": "GPT Hub is a next-generation AI assistant platform featuring progressive streaming, deep reasoning Think Mode, live web grounding, multimodal analysis, and customizable workspaces.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

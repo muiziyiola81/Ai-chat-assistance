@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #060907;
+    --bg-secondary: #0a110d;
+    --bg-tertiary: #0f1a14;
+    --bg-surface: #14221b;
+    --accent-emerald: #10b981;
+    --accent-emerald-light: #34d399;
+    --accent-emerald-dark: #059669;
+    --border-subtle: rgba(16, 185, 129, 0.12);
+    --border-hover: rgba(16, 185, 129, 0.28);
+    --text-primary: #e6ede8;
+    --text-secondary: #8e9e94;
+    --text-muted: #56685e;
+  }
+
+  .light {
+    --bg-primary: #f6f8f6;
+    --bg-secondary: #edf2ee;
+    --bg-tertiary: #e1e9e3;
+    --bg-surface: #ffffff;
+    --accent-emerald: #059669;
+    --accent-emerald-light: #10b981;
+    --accent-emerald-dark: #047857;
+    --border-subtle: rgba(5, 150, 105, 0.15);
+    --border-hover: rgba(5, 150, 105, 0.35);
+    --text-primary: #111a14;
+    --text-secondary: #43544a;
+    --text-muted: #73877b;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.2);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.4);
+}
+
+/* Emerald Subtle Glow Utilities */
+.emerald-glow {
+  box-shadow: 0 0 25px -4px rgba(16, 185, 129, 0.15);
+}
+
+.emerald-glow-strong {
+  box-shadow: 0 0 35px -2px rgba(16, 185, 129, 0.3);
+}
+
+.emerald-border-glow {
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.05), 0 0 15px rgba(16, 185, 129, 0.1);
+}
+
+/* Glassmorphism */
+.glass-panel {
+  background: rgba(10, 17, 13, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-dropdown {
+  background: rgba(15, 26, 20, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* Wave animation for audio recording */
+@keyframes audio-wave {
+  0%, 100% {
+    height: 6px;
+  }
+  50% {
+    height: 24px;
+  }
+}
+
+.animate-wave-1 {
+  animation: audio-wave 1s ease-in-out infinite 0.1s;
+}
+.animate-wave-2 {
+  animation: audio-wave 0.8s ease-in-out infinite 0.25s;
+}
+.animate-wave-3 {
+  animation: audio-wave 1.2s ease-in-out infinite 0.4s;
+}
+.animate-wave-4 {
+  animation: audio-wave 0.9s ease-in-out infinite 0.15s;
+}
+.animate-wave-5 {
+  animation: audio-wave 1.1s ease-in-out infinite 0.3s;
+}
