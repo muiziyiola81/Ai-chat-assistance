@@ -49,32 +49,32 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
     parts.push(
       <div
         key={`code-${currentIndex}`}
-        className="my-3.5 rounded-xl border border-emerald-900/40 bg-[#070d09] overflow-hidden shadow-lg"
+        className="my-3.5 rounded-xl border border-[#262626] bg-[#0A0A0A] overflow-hidden"
       >
-        <div className="flex items-center justify-between px-4 py-2 border-b border-emerald-900/30 bg-[#0a140e] text-xs text-emerald-400/80 font-mono">
-          <span className="uppercase tracking-wider font-semibold text-[11px] text-emerald-400">
+        <div className="flex items-center justify-between px-3.5 py-2 border-b border-[#222222] bg-[#111111] text-xs text-[#A3A3A3] font-mono">
+          <span className="uppercase tracking-wider font-medium text-[11px] text-[#A3A3A3]">
             {language}
           </span>
           <button
             onClick={() => handleCopyCode(codeSnippet, currentIndex)}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 transition-colors border border-emerald-800/30 active:scale-95"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#171717] hover:bg-[#222222] text-[#A3A3A3] hover:text-[#FFFFFF] transition-all border border-[#262626] active:scale-95"
             title="Copy code"
             aria-label="Copy code"
           >
             {copiedIndex === currentIndex ? (
               <>
-                <Check className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-[11px] text-emerald-300">Copied!</span>
+                <Check className="w-3.5 h-3.5 text-[#FFFFFF]" />
+                <span className="text-[11px] text-[#FFFFFF]">Copied</span>
               </>
             ) : (
               <>
-                <Copy className="w-3.5 h-3.5 text-emerald-400/80" />
+                <Copy className="w-3.5 h-3.5 text-[#A3A3A3]" />
                 <span className="text-[11px]">Copy</span>
               </>
             )}
           </button>
         </div>
-        <div className="p-4 overflow-x-auto text-[13.5px] leading-relaxed font-mono text-emerald-100/90 selection:bg-emerald-500/30">
+        <div className="p-4 overflow-x-auto text-[13px] leading-relaxed font-mono text-[#E5E5E5] selection:bg-white/20 selection:text-white">
           <pre className="m-0 whitespace-pre">
             <code>{codeSnippet}</code>
           </pre>
@@ -98,10 +98,10 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
   }
 
   return (
-    <div className="text-[15px] leading-[1.7] text-[#dfe8e1] space-y-2.5 selection:bg-emerald-500/30 selection:text-emerald-100">
+    <div className="text-[15px] leading-[1.7] text-[#ECECEC] space-y-2.5 selection:bg-white/20 selection:text-white">
       {parts}
       {isStreaming && (
-        <span className="inline-block w-2 h-4 ml-1 bg-emerald-400 animate-pulse rounded-xs align-middle" />
+        <span className="inline-block w-2 h-4 ml-1 bg-[#FFFFFF] animate-pulse rounded-xs align-middle" />
       )}
     </div>
   );
@@ -124,7 +124,7 @@ const TextSection: React.FC<{
         renderedElements.push(
           <ol
             key={key}
-            className="list-decimal pl-5 space-y-1.5 my-2.5 text-[#d8e3dc]"
+            className="list-decimal pl-5 space-y-1.5 my-2 text-[#D4D4D4]"
           >
             {currentListItems}
           </ol>
@@ -133,7 +133,7 @@ const TextSection: React.FC<{
         renderedElements.push(
           <ul
             key={key}
-            className="list-disc pl-5 space-y-1.5 my-2.5 text-[#d8e3dc] marker:text-emerald-400"
+            className="list-disc pl-5 space-y-1.5 my-2 text-[#D4D4D4] marker:text-[#737373]"
           >
             {currentListItems}
           </ul>
@@ -147,20 +147,20 @@ const TextSection: React.FC<{
     if (tableRows.length > 0) {
       const [headerRow, ...bodyRows] = tableRows;
       renderedElements.push(
-        <div key={key} className="my-3.5 overflow-x-auto rounded-xl border border-emerald-900/40 bg-[#09120c]">
-          <table className="min-w-full text-sm text-left border-collapse">
+        <div key={key} className="my-3 overflow-x-auto rounded-xl border border-[#262626] bg-[#0A0A0A]">
+          <table className="min-w-full text-xs text-left border-collapse">
             <thead>
-              <tr className="border-b border-emerald-900/60 bg-[#0c1a11] text-emerald-300 font-semibold">
+              <tr className="border-b border-[#262626] bg-[#111111] text-[#FFFFFF] font-medium">
                 {headerRow.map((cell, idx) => (
-                  <th key={idx} className="px-3.5 py-2.5">
+                  <th key={idx} className="px-3.5 py-2.5 font-semibold">
                     {parseInline(cell.trim(), sources)}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-emerald-950/60 text-[#d4ded7]">
+            <tbody className="divide-y divide-[#1F1F1F] text-[#D4D4D4]">
               {bodyRows.map((row, rIdx) => (
-                <tr key={rIdx} className="hover:bg-emerald-950/30 transition-colors">
+                <tr key={rIdx} className="hover:bg-[#141414] transition-colors">
                   {row.map((cell, cIdx) => (
                     <td key={cIdx} className="px-3.5 py-2">
                       {parseInline(cell.trim(), sources)}
@@ -184,7 +184,6 @@ const TextSection: React.FC<{
     // Check Table line
     if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
       flushList(`list-before-table-${i}`);
-      // Skip markdown table divider line like |---|---|
       if (/^\|[\s\-:|]+\|$/.test(trimmed)) {
         inTable = true;
         continue;
@@ -206,7 +205,7 @@ const TextSection: React.FC<{
       renderedElements.push(
         <h3
           key={`h3-${i}`}
-          className="text-base font-semibold text-emerald-200 mt-4 mb-2 flex items-center gap-1.5"
+          className="text-base font-semibold text-[#FFFFFF] mt-4 mb-2 flex items-center gap-1.5"
         >
           {parseInline(trimmed.substring(4), sources)}
         </h3>
@@ -219,7 +218,7 @@ const TextSection: React.FC<{
       renderedElements.push(
         <h2
           key={`h2-${i}`}
-          className="text-lg font-semibold text-emerald-100 mt-5 mb-2.5 border-b border-emerald-900/30 pb-1"
+          className="text-lg font-semibold text-[#FFFFFF] mt-5 mb-2.5 border-b border-[#222222] pb-1.5"
         >
           {parseInline(trimmed.substring(3), sources)}
         </h2>
@@ -232,7 +231,7 @@ const TextSection: React.FC<{
       renderedElements.push(
         <h1
           key={`h1-${i}`}
-          className="text-xl font-bold text-white mt-6 mb-3 border-b border-emerald-800/40 pb-1.5"
+          className="text-xl font-bold text-[#FFFFFF] mt-6 mb-3 border-b border-[#262626] pb-2"
         >
           {parseInline(trimmed.substring(2), sources)}
         </h1>
@@ -246,7 +245,7 @@ const TextSection: React.FC<{
       renderedElements.push(
         <blockquote
           key={`quote-${i}`}
-          className="border-l-2 border-emerald-500/70 pl-3.5 my-2.5 italic text-emerald-200/80 bg-emerald-950/20 py-1 rounded-r-lg"
+          className="border-l-2 border-[#666666] pl-3.5 my-2.5 text-[#A3A3A3] bg-[#111111] py-1.5 rounded-r-lg"
         >
           {parseInline(trimmed.substring(2), sources)}
         </blockquote>
@@ -294,7 +293,7 @@ const TextSection: React.FC<{
     // Normal paragraph
     flushList(`list-${i}`);
     renderedElements.push(
-      <p key={`p-${i}`} className="my-1.5 leading-relaxed">
+      <p key={`p-${i}`} className="my-1.5 leading-relaxed text-[#ECECEC]">
         {parseInline(line, sources)}
       </p>
     );
@@ -308,7 +307,6 @@ const TextSection: React.FC<{
 
 // Inline parser for bold, italic, inline code, links, and search citations
 function parseInline(text: string, sources: GroundingSource[] = []): React.ReactNode {
-  // First handle inline code: `code`
   const parts: React.ReactNode[] = [];
   const regex = /(`[^`]+`)|(\*\*.*?\*\*)|(\*.*?\*)|(\[[^\]]+\]\([^)]+\))|(\[\d+\])/g;
 
@@ -328,7 +326,7 @@ function parseInline(text: string, sources: GroundingSource[] = []): React.React
       parts.push(
         <code
           key={`code-${match.index}`}
-          className="px-1.5 py-0.5 mx-0.5 text-[13px] rounded bg-emerald-950/70 border border-emerald-800/40 text-emerald-300 font-mono"
+          className="px-1.5 py-0.5 mx-0.5 text-[12.5px] rounded bg-[#171717] border border-[#262626] text-[#FFFFFF] font-mono"
         >
           {code}
         </code>
@@ -338,7 +336,7 @@ function parseInline(text: string, sources: GroundingSource[] = []): React.React
     else if (token.startsWith('**') && token.endsWith('**')) {
       const boldText = token.slice(2, -2);
       parts.push(
-        <strong key={`bold-${match.index}`} className="font-semibold text-emerald-50">
+        <strong key={`bold-${match.index}`} className="font-semibold text-[#FFFFFF]">
           {boldText}
         </strong>
       );
@@ -347,7 +345,7 @@ function parseInline(text: string, sources: GroundingSource[] = []): React.React
     else if (token.startsWith('*') && token.endsWith('*')) {
       const italicText = token.slice(1, -1);
       parts.push(
-        <em key={`italic-${match.index}`} className="italic text-emerald-200/90">
+        <em key={`italic-${match.index}`} className="italic text-[#D4D4D4]">
           {italicText}
         </em>
       );
@@ -364,10 +362,10 @@ function parseInline(text: string, sources: GroundingSource[] = []): React.React
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-0.5 text-emerald-400 hover:text-emerald-300 underline underline-offset-2 font-medium transition-colors"
+            className="inline-flex items-center gap-0.5 text-[#FFFFFF] hover:text-[#A3A3A3] underline underline-offset-2 font-medium transition-colors"
           >
             <span>{title}</span>
-            <ExternalLink className="w-3 h-3 inline-block ml-0.5 opacity-70" />
+            <ExternalLink className="w-3 h-3 inline-block ml-0.5 opacity-60" />
           </a>
         );
       }
@@ -382,7 +380,7 @@ function parseInline(text: string, sources: GroundingSource[] = []): React.React
           href={matchedSource ? matchedSource.uri : '#'}
           target={matchedSource ? '_blank' : undefined}
           rel={matchedSource ? 'noopener noreferrer' : undefined}
-          className="inline-flex items-center justify-center px-1.5 py-0.2 mx-0.5 text-[11px] font-mono font-semibold rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800/50 hover:bg-emerald-900/80 transition-colors"
+          className="inline-flex items-center justify-center px-1.5 py-0.2 mx-0.5 text-[11px] font-mono font-medium rounded bg-[#171717] text-[#A3A3A3] border border-[#262626] hover:bg-[#222222] hover:text-[#FFFFFF] transition-colors"
           title={matchedSource ? matchedSource.title : `Citation ${token}`}
         >
           {token}

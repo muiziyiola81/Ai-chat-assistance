@@ -39,38 +39,39 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/90 backdrop-blur-md"
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm"
         />
 
         {/* Modal Content */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative z-10 max-w-5xl max-h-[90vh] flex flex-col items-center bg-[#070c09] border border-emerald-900/50 rounded-2xl shadow-2xl overflow-hidden"
+          exit={{ scale: 0.96, opacity: 0 }}
+          transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+          className="relative z-10 max-w-4xl max-h-[90vh] flex flex-col items-center bg-[#0A0A0A] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden"
         >
           {/* Header Bar */}
-          <div className="w-full flex items-center justify-between px-4 py-3 bg-[#0a120e] border-b border-emerald-900/40 text-sm">
-            <span className="text-emerald-200 font-medium truncate max-w-md">
+          <div className="w-full flex items-center justify-between px-4 py-3 bg-[#0E0E0E] border-b border-[#1A1A1A] text-xs">
+            <span className="text-[#FFFFFF] font-medium truncate max-w-xs sm:max-w-md">
               {image.name}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <button
                 onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}
-                className="p-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 transition-colors"
+                className="p-1.5 rounded-lg bg-[#141414] hover:bg-[#1F1F1F] text-[#A3A3A3] hover:text-[#FFFFFF] transition-colors"
                 title="Zoom Out"
                 aria-label="Zoom Out"
               >
                 <ZoomOut className="w-4 h-4" />
               </button>
-              <span className="text-xs text-emerald-400/80 font-mono w-12 text-center">
+              <span className="text-[11px] text-[#737373] font-mono w-10 text-center">
                 {Math.round(zoom * 100)}%
               </span>
               <button
                 onClick={() => setZoom((z) => Math.min(3, z + 0.25))}
-                className="p-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 transition-colors"
+                className="p-1.5 rounded-lg bg-[#141414] hover:bg-[#1F1F1F] text-[#A3A3A3] hover:text-[#FFFFFF] transition-colors"
                 title="Zoom In"
                 aria-label="Zoom In"
               >
@@ -78,15 +79,15 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
               </button>
               <button
                 onClick={handleDownload}
-                className="p-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900/60 text-emerald-300 transition-colors ml-1"
-                title="Download Image"
-                aria-label="Download Image"
+                className="p-1.5 rounded-lg bg-[#141414] hover:bg-[#1F1F1F] text-[#A3A3A3] hover:text-[#FFFFFF] transition-colors ml-0.5"
+                title="Download"
+                aria-label="Download"
               >
                 <Download className="w-4 h-4" />
               </button>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 hover:text-white transition-colors ml-1"
+                className="p-1.5 rounded-lg bg-[#141414] hover:bg-[#1F1F1F] text-[#A3A3A3] hover:text-[#FFFFFF] transition-colors ml-0.5"
                 title="Close"
                 aria-label="Close"
               >
@@ -96,13 +97,13 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({
           </div>
 
           {/* Image Display */}
-          <div className="overflow-auto p-4 flex items-center justify-center min-h-[300px] max-h-[calc(90vh-60px)]">
+          <div className="overflow-auto p-4 flex items-center justify-center min-h-[250px] max-h-[calc(88vh-55px)] bg-[#050505]">
             <motion.img
               src={image.previewUrl || image.base64}
               alt={image.name}
               style={{ transform: `scale(${zoom})`, transformOrigin: 'center' }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-              className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-lg border border-emerald-900/30"
+              transition={{ duration: 0.15 }}
+              className="max-w-full max-h-[72vh] object-contain rounded-lg border border-[#1A1A1A]"
             />
           </div>
         </motion.div>

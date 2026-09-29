@@ -528,11 +528,11 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen w-screen bg-[#060907] text-[#e3ebe5] overflow-hidden">
+    <div className="flex h-screen w-screen bg-[#000000] text-[#FFFFFF] overflow-hidden">
       {/* Offline Notice Banner */}
       {!isOnline && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-red-950/90 border-b border-red-500/40 text-red-200 text-xs py-1.5 px-4 flex items-center justify-center gap-2">
-          <WifiOff className="w-3.5 h-3.5" />
+        <div className="fixed top-0 left-0 right-0 z-50 bg-[#171717] border-b border-[#333333] text-[#FFFFFF] text-xs py-1.5 px-4 flex items-center justify-center gap-2">
+          <WifiOff className="w-3.5 h-3.5 text-[#A3A3A3]" />
           <span>You are currently offline. Changes will save locally.</span>
         </div>
       )}

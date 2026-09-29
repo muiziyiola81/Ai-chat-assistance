@@ -97,7 +97,7 @@ export const DEFAULT_PROJECTS: Project[] = [
     description: 'General inquiries, creative thoughts, and exploration.',
     instructions: 'Be conversational, helpful, and maintain a friendly yet professional tone.',
     createdAt: Date.now() - 86400000 * 3,
-    color: '#10b981',
+    color: '#FFFFFF',
   },
 ];
 
@@ -223,7 +223,7 @@ export const StorageService = {
       },
       {
         id: 'mem-2',
-        content: 'Values clean dark-mode interfaces with emerald green accents.',
+        content: 'Values clean monochrome interfaces with subtle light-black depth.',
         createdAt: Date.now() - 86400000 * 1,
       },
     ];

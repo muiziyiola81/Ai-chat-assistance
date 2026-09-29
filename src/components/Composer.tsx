@@ -8,13 +8,11 @@ import {
   Mic,
   MicOff,
   Globe,
-  Sparkles,
   BrainCircuit,
   X,
   FileText,
   Table,
-  Image as ImageIcon,
-  ChevronUp,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { Attachment } from '../types';
 
@@ -88,7 +86,7 @@ export const Composer: React.FC<ComposerProps> = ({
       setRecognitionError(
         'Speech recognition is not supported in this browser. Please use Chrome or Safari.'
       );
-      setTimeout(() => setRecognitionError(null), 4000);
+      setTimeout(() => setRecognitionError(null), 3500);
       return;
     }
 
@@ -118,10 +116,10 @@ export const Composer: React.FC<ComposerProps> = ({
         if (event.error === 'not-allowed') {
           setRecognitionError('Microphone permission was denied.');
         } else {
-          setRecognitionError(`Voice error: ${event.error}`);
+          setRecognitionError(`Voice input error: ${event.error}`);
         }
         setIsRecording(false);
-        setTimeout(() => setRecognitionError(null), 4000);
+        setTimeout(() => setRecognitionError(null), 3500);
       };
 
       recognition.onend = () => {
@@ -162,7 +160,6 @@ export const Composer: React.FC<ComposerProps> = ({
         };
         reader.readAsDataURL(file);
       } else {
-        // Read text or file data
         reader.onload = () => {
           const content = reader.result as string;
           onAddAttachment({
@@ -172,7 +169,7 @@ export const Composer: React.FC<ComposerProps> = ({
             mimeType: file.type || 'text/plain',
             size: file.size,
             base64: btoa(unescape(encodeURIComponent(content))),
-            textContent: content.slice(0, 50000), // Preview limit for prompt injection
+            textContent: content.slice(0, 50000),
           });
         };
         reader.readAsText(file);
@@ -196,20 +193,21 @@ export const Composer: React.FC<ComposerProps> = ({
   const canSend = (input.trim().length > 0 || attachments.length > 0) && !disabled;
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-3 sm:px-4 pb-3 sm:pb-5">
+    <div className="w-full max-w-3xl mx-auto px-3 sm:px-4 pb-3 sm:pb-5">
       {/* Speech error notification */}
       <AnimatePresence>
         {recognitionError && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            className="mb-2.5 px-3 py-1.5 rounded-lg bg-red-950/80 border border-red-500/30 text-xs text-red-200 flex items-center justify-between"
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.2 }}
+            className="mb-2 px-3 py-1.5 rounded-xl bg-[#171717] border border-[#333333] text-xs text-[#E5E5E5] flex items-center justify-between"
           >
             <span>{recognitionError}</span>
             <button
               onClick={() => setRecognitionError(null)}
-              className="text-red-300 hover:text-white"
+              className="text-[#A3A3A3] hover:text-[#FFFFFF]"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -217,14 +215,14 @@ export const Composer: React.FC<ComposerProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Main Composer Box */}
+      {/* Main Composer Box - Light-Black Morph Container */}
       <motion.div
         layout
-        transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-        className={`relative rounded-2xl bg-[#0a120d]/90 backdrop-blur-xl border transition-all duration-300 ${
+        transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+        className={`relative rounded-2xl bg-[#0A0A0A] border transition-all duration-200 ${
           isGenerating
-            ? 'border-emerald-600/40 shadow-[0_0_25px_rgba(16,185,129,0.12)]'
-            : 'border-emerald-900/40 hover:border-emerald-700/50 shadow-xl'
+            ? 'border-[#404040]'
+            : 'border-[#222222] hover:border-[#333333] focus-within:border-[#444444]'
         }`}
       >
         {/* Attachment Previews */}
@@ -234,16 +232,18 @@ export const Composer: React.FC<ComposerProps> = ({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="px-3.5 pt-3.5 flex flex-wrap gap-2.5 items-center overflow-hidden border-b border-emerald-950/40 pb-2.5"
+              transition={{ duration: 0.2 }}
+              className="px-3.5 pt-3 flex flex-wrap gap-2 items-center overflow-hidden border-b border-[#1A1A1A] pb-2.5"
             >
               {attachments.map((att) => (
                 <motion.div
                   key={att.id}
-                  layoutId={`att-${att.id}`}
-                  initial={{ scale: 0.8, opacity: 0 }}
+                  layout
+                  initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  className="group relative flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-emerald-950/50 border border-emerald-800/40 hover:border-emerald-600/50 transition-all max-w-[220px]"
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                  className="group relative flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-[#141414] border border-[#262626] hover:border-[#3A3A3A] transition-all max-w-[200px]"
                 >
                   {att.type === 'image' ? (
                     <button
@@ -255,27 +255,25 @@ export const Composer: React.FC<ComposerProps> = ({
                       <img
                         src={att.previewUrl || att.base64}
                         alt={att.name}
-                        className="w-8 h-8 rounded-lg object-cover border border-emerald-700/30 flex-shrink-0"
+                        className="w-7 h-7 rounded-lg object-cover border border-[#2A2A2A] flex-shrink-0"
                       />
-                      <div className="truncate text-xs text-emerald-200">
+                      <div className="truncate text-xs text-[#E5E5E5]">
                         <div className="truncate font-medium">{att.name}</div>
-                        <div className="text-[10px] text-emerald-400/70">
-                          Image
-                        </div>
+                        <div className="text-[10px] text-[#737373]">Image</div>
                       </div>
                     </button>
                   ) : (
                     <div className="flex items-center gap-2 overflow-hidden">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-900/40 border border-emerald-700/30 flex items-center justify-center flex-shrink-0 text-emerald-300">
+                      <div className="w-7 h-7 rounded-lg bg-[#1C1C1C] border border-[#2A2A2A] flex items-center justify-center flex-shrink-0 text-[#A3A3A3]">
                         {att.name.endsWith('.csv') || att.name.endsWith('.xlsx') ? (
-                          <Table className="w-4 h-4 text-emerald-400" />
+                          <Table className="w-3.5 h-3.5" />
                         ) : (
-                          <FileText className="w-4 h-4 text-emerald-400" />
+                          <FileText className="w-3.5 h-3.5" />
                         )}
                       </div>
-                      <div className="truncate text-xs text-emerald-200">
+                      <div className="truncate text-xs text-[#E5E5E5]">
                         <div className="truncate font-medium">{att.name}</div>
-                        <div className="text-[10px] text-emerald-400/70">
+                        <div className="text-[10px] text-[#737373]">
                           {Math.round(att.size / 1024)} KB
                         </div>
                       </div>
@@ -286,11 +284,11 @@ export const Composer: React.FC<ComposerProps> = ({
                   <button
                     type="button"
                     onClick={() => onRemoveAttachment(att.id)}
-                    className="p-1 rounded-full bg-emerald-950 hover:bg-emerald-800/80 text-emerald-400 hover:text-white transition-colors"
+                    className="p-1 rounded-full bg-[#1C1C1C] hover:bg-[#2A2A2A] text-[#A3A3A3] hover:text-[#FFFFFF] transition-colors"
                     title="Remove attachment"
                     aria-label="Remove attachment"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-3 h-3" />
                   </button>
                 </motion.div>
               ))}
@@ -308,19 +306,19 @@ export const Composer: React.FC<ComposerProps> = ({
             disabled={disabled}
             placeholder={
               thinkMode
-                ? 'Ask GPT Hub a deep reasoning question...'
+                ? 'Ask GPT Hub with deep reasoning...'
                 : webSearch
-                ? 'Search the web or ask anything with live sources...'
+                ? 'Search the web or ask anything...'
                 : 'Message GPT Hub...'
             }
             rows={1}
-            className="w-full bg-transparent text-[15px] sm:text-[15.5px] text-[#e6ece7] placeholder-[#6b7e73] resize-none outline-none focus:outline-none min-h-[36px] max-h-[220px] leading-relaxed selection:bg-emerald-500/30"
+            className="w-full bg-transparent text-[15px] text-[#FFFFFF] placeholder-[#666666] resize-none outline-none focus:outline-none min-h-[36px] max-h-[200px] leading-relaxed selection:bg-white/20"
           />
         </div>
 
         {/* Composer Controls & Toolbars */}
         <div className="px-3 pb-2.5 pt-1 flex items-center justify-between gap-1 sm:gap-2 flex-wrap sm:flex-nowrap">
-          {/* Left Actions: Attach, Camera, Voice, Web, Think */}
+          {/* Left Actions: Attach, Camera, Voice, Tools, Search, Think */}
           <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap">
             {/* Hidden File Input */}
             <input
@@ -336,45 +334,45 @@ export const Composer: React.FC<ComposerProps> = ({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="p-2 rounded-xl text-emerald-400/80 hover:text-emerald-200 hover:bg-emerald-950/60 transition-all active:scale-95"
-              title="Attach images or documents"
-              aria-label="Attach images or documents"
+              className="p-2 rounded-xl bg-transparent hover:bg-[#171717] text-[#A3A3A3] hover:text-[#FFFFFF] transition-all active:scale-95"
+              title="Attach files or images"
+              aria-label="Attach files or images"
             >
-              <Paperclip className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+              <Paperclip className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
             </button>
 
             {/* Camera Button */}
             <button
               type="button"
               onClick={onOpenCamera}
-              className="p-2 rounded-xl text-emerald-400/80 hover:text-emerald-200 hover:bg-emerald-950/60 transition-all active:scale-95"
-              title="Take photo with camera"
-              aria-label="Take photo with camera"
+              className="p-2 rounded-xl bg-transparent hover:bg-[#171717] text-[#A3A3A3] hover:text-[#FFFFFF] transition-all active:scale-95"
+              title="Take photo"
+              aria-label="Take photo"
             >
-              <Camera className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+              <Camera className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
             </button>
 
             {/* Microphone Button */}
             <button
               type="button"
               onClick={toggleRecording}
-              className={`p-2 rounded-xl transition-all active:scale-95 relative ${
+              className={`p-2 rounded-xl transition-all active:scale-95 ${
                 isRecording
-                  ? 'bg-red-500/20 text-red-400 border border-red-500/40 shadow-[0_0_12px_rgba(239,68,68,0.3)]'
-                  : 'text-emerald-400/80 hover:text-emerald-200 hover:bg-emerald-950/60'
+                  ? 'bg-[#222222] text-[#FFFFFF] border border-[#404040]'
+                  : 'bg-transparent hover:bg-[#171717] text-[#A3A3A3] hover:text-[#FFFFFF]'
               }`}
               title={isRecording ? 'Stop voice recording' : 'Voice input'}
               aria-label={isRecording ? 'Stop voice recording' : 'Voice input'}
             >
               {isRecording ? (
-                <div className="flex items-center gap-1">
-                  <MicOff className="w-4 h-4 animate-pulse text-red-400" />
-                  <span className="hidden sm:inline text-[11px] font-medium text-red-300">
+                <div className="flex items-center gap-1.5">
+                  <MicOff className="w-4 h-4 text-[#FFFFFF] animate-pulse" />
+                  <span className="hidden sm:inline text-[11px] font-medium text-[#FFFFFF]">
                     Listening...
                   </span>
                 </div>
               ) : (
-                <Mic className="w-4 h-4 sm:w-[18px] sm:h-[18px]" />
+                <Mic className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
               )}
             </button>
 
@@ -382,16 +380,15 @@ export const Composer: React.FC<ComposerProps> = ({
             <button
               type="button"
               onClick={onOpenTools}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-medium text-emerald-400/90 hover:text-emerald-100 hover:bg-emerald-950/60 transition-all border border-emerald-900/30"
-              title="Open GPT Hub Tools"
-              aria-label="Open GPT Hub Tools"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium bg-[#111111] hover:bg-[#1C1C1C] text-[#A3A3A3] hover:text-[#FFFFFF] transition-all border border-[#222222] active:scale-95"
+              title="Open Tools"
+              aria-label="Open Tools"
             >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+              <SlidersHorizontal className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Tools</span>
             </button>
 
-            {/* Divider */}
-            <div className="hidden sm:block w-[1px] h-5 bg-emerald-900/40 mx-0.5" />
+            <div className="hidden sm:block w-[1px] h-4 bg-[#222222] mx-0.5" />
 
             {/* Web Search Toggle Pill */}
             <button
@@ -399,13 +396,13 @@ export const Composer: React.FC<ComposerProps> = ({
               onClick={() => setWebSearch((prev) => !prev)}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all active:scale-95 border ${
                 webSearch
-                  ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 shadow-[0_0_12px_rgba(16,185,129,0.25)]'
-                  : 'bg-emerald-950/30 text-emerald-400/70 border-emerald-900/30 hover:border-emerald-700/40 hover:text-emerald-200'
+                  ? 'bg-[#222222] text-[#FFFFFF] border-[#444444]'
+                  : 'bg-[#111111] text-[#A3A3A3] border-[#222222] hover:bg-[#171717] hover:text-[#FFFFFF]'
               }`}
               title="Search the web for current information"
               aria-label="Toggle web search"
             >
-              <Globe className={`w-3.5 h-3.5 ${webSearch ? 'text-emerald-400 animate-spin-slow' : ''}`} />
+              <Globe className="w-3.5 h-3.5" />
               <span className="hidden xs:inline">Search</span>
             </button>
 
@@ -415,14 +412,14 @@ export const Composer: React.FC<ComposerProps> = ({
               onClick={() => setThinkMode((prev) => !prev)}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all active:scale-95 border ${
                 thinkMode
-                  ? 'bg-emerald-600/25 text-emerald-200 border-emerald-400/60 shadow-[0_0_14px_rgba(16,185,129,0.3)]'
-                  : 'bg-emerald-950/30 text-emerald-400/70 border-emerald-900/30 hover:border-emerald-700/40 hover:text-emerald-200'
+                  ? 'bg-[#222222] text-[#FFFFFF] border-[#444444]'
+                  : 'bg-[#111111] text-[#A3A3A3] border-[#222222] hover:bg-[#171717] hover:text-[#FFFFFF]'
               }`}
-              title="Think Mode: Deep reasoning and thorough logic"
+              title="Think Mode: Deep reasoning"
               aria-label="Toggle Think Mode"
             >
-              <BrainCircuit className={`w-3.5 h-3.5 ${thinkMode ? 'text-emerald-300 animate-pulse' : ''}`} />
-              <span>{thinkMode ? 'Think Mode' : 'Instant'}</span>
+              <BrainCircuit className="w-3.5 h-3.5" />
+              <span>{thinkMode ? 'Think' : 'Instant'}</span>
             </button>
           </div>
 
@@ -432,34 +429,36 @@ export const Composer: React.FC<ComposerProps> = ({
               <motion.button
                 type="button"
                 onClick={onStop}
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/50 flex items-center justify-center transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-                title="Stop generating response"
-                aria-label="Stop generating response"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ duration: 0.15 }}
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] flex items-center justify-center transition-all cursor-pointer"
+                title="Stop generation"
+                aria-label="Stop generation"
               >
-                <Square className="w-4 h-4 fill-emerald-300" />
+                <Square className="w-3.5 h-3.5 fill-[#000000]" />
               </motion.button>
             ) : (
               <motion.button
                 type="button"
                 onClick={onSend}
                 disabled={!canSend}
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                whileHover={canSend ? { scale: 1.05 } : {}}
-                whileTap={canSend ? { scale: 0.95 } : {}}
-                className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center transition-all ${
+                whileHover={canSend ? { scale: 1.04 } : {}}
+                whileTap={canSend ? { scale: 0.96 } : {}}
+                transition={{ duration: 0.15 }}
+                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all ${
                   canSend
-                    ? 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-[0_0_16px_rgba(16,185,129,0.4)] cursor-pointer active:scale-95'
-                    : 'bg-emerald-950/40 text-emerald-800/60 border border-emerald-900/30 cursor-not-allowed'
+                    ? 'bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] cursor-pointer'
+                    : 'bg-[#171717] text-[#404040] border border-[#222222] cursor-not-allowed'
                 }`}
                 title="Send message (Enter)"
                 aria-label="Send message"
               >
-                <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 stroke-[2.5]" />
+                <ArrowUp className="w-4 h-4 stroke-[2.5]" />
               </motion.button>
             )}
           </div>

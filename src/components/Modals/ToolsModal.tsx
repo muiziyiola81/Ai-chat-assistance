@@ -7,8 +7,7 @@ import {
   Image,
   FileSpreadsheet,
   Mic,
-  CheckCircle2,
-  Sliders,
+  SlidersHorizontal,
 } from 'lucide-react';
 
 interface ToolsModalProps {
@@ -33,45 +32,45 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
   const tools = [
     {
       id: 'webSearch',
-      name: 'Live Web Grounding',
-      description: 'Searches real-time web sources via Google Search grounding and returns verified citations with direct URLs.',
+      name: 'Web Grounding',
+      description: 'Search the live web with verified source links and citations.',
       icon: Globe,
       isActive: webSearch,
       toggle: () => setWebSearch((prev) => !prev),
-      badge: 'Interactive',
+      badge: 'Toggleable',
     },
     {
       id: 'thinkMode',
-      name: 'Deep Reasoning (Think Mode)',
-      description: 'Activates comprehensive analytical logic and deliberate multi-step problem solving for complex coding, math, and STEM inquiries.',
+      name: 'Deep Reasoning',
+      description: 'Extended multi-step logic and deliberate problem solving for complex coding, math, and STEM inquiries.',
       icon: BrainCircuit,
       isActive: thinkMode,
       toggle: () => setThinkMode((prev) => !prev),
-      badge: 'Interactive',
+      badge: 'Toggleable',
     },
     {
       id: 'imageAnalysis',
-      name: 'Multimodal Vision Analysis',
-      description: 'Understands photos, screenshots, diagrams, and artwork uploaded from device or captured via live camera.',
+      name: 'Multimodal Vision',
+      description: 'Analyze screenshots, diagrams, and photos uploaded from your device or captured with the camera.',
       icon: Image,
       isActive: true,
-      badge: 'Always Active',
+      badge: 'Active',
     },
     {
       id: 'dataAnalysis',
-      name: 'Spreadsheet & File Engine',
-      description: 'Parses CSV, XLSX, PDF, TXT, and code files to generate structured summaries, metrics, and insights.',
+      name: 'File & Data Engine',
+      description: 'Inspect CSV, XLSX spreadsheets, PDFs, and code documents with structured extraction.',
       icon: FileSpreadsheet,
       isActive: true,
-      badge: 'Always Active',
+      badge: 'Active',
     },
     {
       id: 'voice',
-      name: 'Spoken Voice & Speech-to-Text',
-      description: 'Listen to spoken AI responses using high-fidelity TTS voices and dictate messages hands-free via microphone.',
+      name: 'Spoken Voice & Audio',
+      description: 'Hands-free speech-to-text input and natural text-to-speech voice synthesis.',
       icon: Mic,
       isActive: true,
-      badge: 'Always Active',
+      badge: 'Active',
     },
   ];
 
@@ -82,74 +81,63 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 bg-black/85 backdrop-blur-sm"
         />
 
         <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 15 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 15 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 320 }}
-          className="relative z-10 w-full max-w-lg bg-[#09110d] border border-emerald-800/40 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+          initial={{ scale: 0.96, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.96, opacity: 0 }}
+          transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+          className="relative z-10 w-full max-w-lg bg-[#0A0A0A] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
         >
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-emerald-900/40 bg-[#0c1611]">
+          <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#1A1A1A] bg-[#0E0E0E]">
             <div className="flex items-center gap-2">
-              <Sliders className="w-4 h-4 text-emerald-400" />
-              <h2 className="text-base font-semibold text-emerald-100">
-                GPT Hub Tools & Capabilities
+              <SlidersHorizontal className="w-4 h-4 text-[#FFFFFF]" />
+              <h2 className="text-sm font-semibold text-[#FFFFFF]">
+                Tools & Capabilities
               </h2>
             </div>
             <button
               onClick={onClose}
-              className="p-1 rounded-full text-emerald-400/80 hover:text-emerald-200 hover:bg-emerald-950/60 transition-colors"
+              className="p-1 rounded-lg text-[#737373] hover:text-[#FFFFFF] hover:bg-[#171717] transition-colors"
               aria-label="Close tools menu"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Tools List */}
-          <div className="p-4 sm:p-5 space-y-3 overflow-y-auto max-h-[70vh]">
+          <div className="p-4 space-y-2.5 overflow-y-auto max-h-[70vh]">
             {tools.map((tool) => {
               const Icon = tool.icon;
               return (
                 <div
                   key={tool.id}
-                  className={`p-3.5 rounded-2xl border transition-all ${
+                  className={`p-3.5 rounded-xl border transition-all ${
                     tool.isActive
-                      ? 'bg-emerald-950/30 border-emerald-700/50 shadow-[0_0_15px_rgba(16,185,129,0.08)]'
-                      : 'bg-[#0b140f] border-emerald-950/60'
+                      ? 'bg-[#111111] border-[#333333]'
+                      : 'bg-[#0E0E0E] border-[#1F1F1F]'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3">
-                      <div
-                        className={`p-2.5 rounded-xl border mt-0.5 ${
-                          tool.isActive
-                            ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
-                            : 'bg-emerald-950/30 border-emerald-900/40 text-emerald-600'
-                        }`}
-                      >
-                        <Icon className="w-5 h-5" />
+                      <div className="p-2 rounded-lg bg-[#171717] border border-[#262626] text-[#FFFFFF] mt-0.5">
+                        <Icon className="w-4 h-4" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="text-sm font-semibold text-emerald-100">
+                          <span className="text-xs font-semibold text-[#FFFFFF]">
                             {tool.name}
                           </span>
-                          <span
-                            className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-                              tool.isActive
-                                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                                : 'bg-emerald-950/50 text-emerald-500/60'
-                            }`}
-                          >
+                          <span className="text-[10px] px-1.5 py-0.2 rounded bg-[#171717] border border-[#262626] text-[#737373]">
                             {tool.badge}
                           </span>
                         </div>
-                        <p className="text-xs text-emerald-400/70 mt-1 leading-relaxed">
+                        <p className="text-xs text-[#A3A3A3] mt-1 leading-relaxed">
                           {tool.description}
                         </p>
                       </div>
@@ -158,16 +146,20 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
                     {tool.toggle && (
                       <button
                         onClick={tool.toggle}
-                        className={`relative w-11 h-6 rounded-full transition-colors flex-shrink-0 mt-1 cursor-pointer ${
-                          tool.isActive ? 'bg-emerald-500' : 'bg-emerald-950/80 border border-emerald-800/40'
+                        className={`relative w-10 h-5 rounded-full transition-colors flex-shrink-0 mt-1 cursor-pointer border ${
+                          tool.isActive
+                            ? 'bg-[#FFFFFF] border-[#FFFFFF]'
+                            : 'bg-[#171717] border-[#333333]'
                         }`}
                         aria-label={`Toggle ${tool.name}`}
                       >
                         <motion.div
                           layout
                           transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                          className={`w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${
-                            tool.isActive ? 'translate-x-5' : 'translate-x-0.5'
+                          className={`w-4 h-4 rounded-full shadow-sm transform transition-transform ${
+                            tool.isActive
+                              ? 'translate-x-5 bg-[#000000]'
+                              : 'translate-x-0.5 bg-[#737373]'
                           }`}
                         />
                       </button>
@@ -178,12 +170,12 @@ export const ToolsModal: React.FC<ToolsModalProps> = ({
             })}
           </div>
 
-          {/* Footer Note */}
-          <div className="px-5 py-3 bg-[#0a130e] border-t border-emerald-900/40 text-[11px] text-emerald-400/60 flex items-center justify-between">
-            <span>Changes apply immediately to upcoming messages.</span>
+          {/* Footer */}
+          <div className="px-5 py-3 bg-[#0E0E0E] border-t border-[#1A1A1A] text-[11px] text-[#737373] flex items-center justify-between">
+            <span>Tools apply automatically to new prompts.</span>
             <button
               onClick={onClose}
-              className="px-3 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs transition-colors"
+              className="px-3 py-1.5 rounded-lg bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] font-medium text-xs transition-colors"
             >
               Done
             </button>

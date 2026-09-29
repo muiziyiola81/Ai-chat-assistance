@@ -12,8 +12,6 @@ import {
   Info,
   Check,
   Plus,
-  Moon,
-  Sun,
   Crown,
 } from 'lucide-react';
 import { UserSettings, UserMemory, ResponseStyle } from '../../types';
@@ -32,12 +30,11 @@ interface SettingsModalProps {
 }
 
 type SettingsTab =
-  | 'account'
-  | 'appearance'
   | 'chat'
-  | 'memory'
   | 'instructions'
+  | 'memory'
   | 'voice'
+  | 'account'
   | 'data'
   | 'about';
 
@@ -53,7 +50,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   onClearAllChats,
   onOpenPro,
 }) => {
-  const [activeTab, setActiveTab] = useState<SettingsTab>('appearance');
+  const [activeTab, setActiveTab] = useState<SettingsTab>('chat');
   const [newMemoryText, setNewMemoryText] = useState('');
   const [isExporting, setIsExporting] = useState(false);
   const [clearChatConfirm, setClearChatConfirm] = useState(false);
@@ -99,36 +96,31 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/85 backdrop-blur-md"
+          className="fixed inset-0 bg-black/85 backdrop-blur-sm"
         />
 
         {/* Modal Container */}
         <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 15 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 15 }}
-          transition={{ type: 'spring', damping: 26, stiffness: 320 }}
-          className="relative z-10 w-full max-w-2xl bg-[#08100c] border border-emerald-800/40 rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-[85vh] max-h-[640px]"
+          initial={{ scale: 0.96, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.96, opacity: 0 }}
+          transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+          className="relative z-10 w-full max-w-2xl bg-[#0A0A0A] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row h-[80vh] max-h-[600px]"
         >
           {/* Sidebar Tabs */}
-          <div className="w-full md:w-56 bg-[#0a140f] border-b md:border-b-0 md:border-r border-emerald-900/40 p-3 flex md:flex-col overflow-x-auto md:overflow-y-auto space-x-1 md:space-x-0 md:space-y-1 flex-shrink-0">
-            <div className="hidden md:flex items-center gap-2 px-3 py-2.5 mb-2 text-emerald-400 font-semibold text-sm">
-              <Sliders className="w-4 h-4" />
+          <div className="w-full md:w-52 bg-[#0E0E0E] border-b md:border-b-0 md:border-r border-[#1A1A1A] p-2.5 flex md:flex-col overflow-x-auto md:overflow-y-auto space-x-1 md:space-x-0 md:space-y-1 flex-shrink-0">
+            <div className="hidden md:flex items-center gap-2 px-3 py-2 mb-1 text-[#FFFFFF] font-semibold text-xs">
+              <Sliders className="w-3.5 h-3.5" />
               <span>Settings</span>
             </div>
 
             <TabButton
-              active={activeTab === 'appearance'}
-              onClick={() => setActiveTab('appearance')}
-              icon={Moon}
-              label="Appearance"
-            />
-            <TabButton
               active={activeTab === 'chat'}
               onClick={() => setActiveTab('chat')}
               icon={Sliders}
-              label="Chat Preferences"
+              label="Preferences"
             />
             <TabButton
               active={activeTab === 'instructions'}
@@ -169,81 +161,43 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Tab Content Area */}
-          <div className="flex-1 flex flex-col overflow-hidden bg-[#070e0a]">
+          <div className="flex-1 flex flex-col overflow-hidden bg-[#0A0A0A]">
             {/* Top Close Bar */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-emerald-900/30">
-              <span className="text-xs uppercase tracking-wider font-semibold text-emerald-400/80">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[#1A1A1A]">
+              <span className="text-xs uppercase tracking-wider font-medium text-[#737373]">
                 {activeTab}
               </span>
               <button
                 onClick={onClose}
-                className="p-1 rounded-full text-emerald-400/80 hover:text-emerald-100 hover:bg-emerald-950/60 transition-colors"
+                className="p-1 rounded-lg text-[#737373] hover:text-[#FFFFFF] hover:bg-[#171717] transition-colors"
                 aria-label="Close settings"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {/* Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-5 space-y-5 text-sm">
-              {/* Appearance Tab */}
-              {activeTab === 'appearance' && (
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-base font-medium text-emerald-100 mb-1">
-                      Theme
-                    </h3>
-                    <p className="text-xs text-emerald-400/70 mb-3">
-                      Select your interface color scheme. GPT Hub's default is the signature premium dark emerald.
-                    </p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <button
-                        onClick={() => onUpdateSettings({ theme: 'dark' })}
-                        className={`p-4 rounded-2xl border flex flex-col items-center gap-2 transition-all ${
-                          settings.theme === 'dark'
-                            ? 'bg-emerald-950/60 border-emerald-500 text-emerald-100 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                            : 'bg-[#0b140f] border-emerald-900/40 text-emerald-400/70 hover:border-emerald-700/50'
-                        }`}
-                      >
-                        <Moon className="w-6 h-6 text-emerald-400" />
-                        <span className="font-medium text-xs">Dark Emerald (Default)</span>
-                      </button>
-                      <button
-                        onClick={() => onUpdateSettings({ theme: 'light' })}
-                        className={`p-4 rounded-2xl border flex flex-col items-center gap-2 transition-all ${
-                          settings.theme === 'light'
-                            ? 'bg-emerald-950/60 border-emerald-500 text-emerald-100 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
-                            : 'bg-[#0b140f] border-emerald-900/40 text-emerald-400/70 hover:border-emerald-700/50'
-                        }`}
-                      >
-                        <Sun className="w-6 h-6 text-emerald-400" />
-                        <span className="font-medium text-xs">Light Scheme</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* Chat Preferences Tab */}
               {activeTab === 'chat' && (
-                <div className="space-y-5">
+                <div className="space-y-4">
                   <div>
-                    <h3 className="text-base font-medium text-emerald-100 mb-1">
+                    <h3 className="text-sm font-semibold text-[#FFFFFF] mb-1">
                       Response Style
                     </h3>
-                    <p className="text-xs text-emerald-400/70 mb-3">
-                      Configure how the AI structures its replies across all sessions.
+                    <p className="text-xs text-[#737373] mb-3">
+                      Adjust how detailed or concise the assistant responses should be.
                     </p>
-                    <div className="grid grid-cols-3 gap-2.5">
+                    <div className="grid grid-cols-3 gap-2">
                       {(['concise', 'balanced', 'detailed'] as ResponseStyle[]).map(
                         (style) => (
                           <button
                             key={style}
                             onClick={() => onUpdateSettings({ responseStyle: style })}
-                            className={`p-3 rounded-xl border text-center capitalize text-xs font-medium transition-all ${
+                            className={`p-2.5 rounded-xl border text-center capitalize text-xs font-medium transition-all ${
                               settings.responseStyle === style
-                                ? 'bg-emerald-500/20 border-emerald-500 text-emerald-200 shadow-[0_0_12px_rgba(16,185,129,0.25)]'
-                                : 'bg-[#0b140f] border-emerald-950/60 text-emerald-400/70 hover:border-emerald-700/40'
+                                ? 'bg-[#FFFFFF] border-[#FFFFFF] text-[#000000]'
+                                : 'bg-[#111111] border-[#262626] text-[#A3A3A3] hover:bg-[#171717] hover:text-[#FFFFFF]'
                             }`}
                           >
                             {style}
@@ -253,25 +207,31 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-emerald-900/30">
+                  <div className="pt-3 border-t border-[#1A1A1A]">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-medium text-emerald-100">Auto-Scroll During Stream</div>
-                        <div className="text-xs text-emerald-400/70">
-                          Smoothly keep current streaming text centered in view.
+                        <div className="font-medium text-xs text-[#FFFFFF]">
+                          Auto-Scroll Stream
+                        </div>
+                        <div className="text-[11px] text-[#737373]">
+                          Keep latest streamed text centered in view.
                         </div>
                       </div>
                       <button
                         onClick={() =>
                           onUpdateSettings({ autoScroll: !settings.autoScroll })
                         }
-                        className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
-                          settings.autoScroll ? 'bg-emerald-500' : 'bg-emerald-950 border border-emerald-800'
+                        className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer border ${
+                          settings.autoScroll
+                            ? 'bg-[#FFFFFF] border-[#FFFFFF]'
+                            : 'bg-[#171717] border-[#333333]'
                         }`}
                       >
                         <div
-                          className={`w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${
-                            settings.autoScroll ? 'translate-x-5' : 'translate-x-0.5'
+                          className={`w-4 h-4 rounded-full shadow-sm transform transition-transform ${
+                            settings.autoScroll
+                              ? 'translate-x-5 bg-[#000000]'
+                              : 'translate-x-0.5 bg-[#737373]'
                           }`}
                         />
                       </button>
@@ -282,14 +242,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Custom Instructions */}
               {activeTab === 'instructions' && (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div>
-                    <h3 className="text-base font-medium text-emerald-100 mb-1">
+                    <h3 className="text-sm font-semibold text-[#FFFFFF] mb-1">
                       Custom Instructions
                     </h3>
-                    <p className="text-xs text-emerald-400/70 mb-3 leading-relaxed">
+                    <p className="text-xs text-[#737373] mb-3 leading-relaxed">
                       What would you like GPT Hub to know about you to provide better responses?
-                      (e.g., tone preferences, preferred languages, formatting requirements)
                     </p>
                     <textarea
                       value={settings.customInstructions}
@@ -297,8 +256,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                         onUpdateSettings({ customInstructions: e.target.value })
                       }
                       rows={5}
-                      placeholder="e.g. I am a TypeScript developer. Always prioritize strict types, functional clean code, and avoid unnecessary comments."
-                      className="w-full p-3.5 rounded-2xl bg-[#0b140f] border border-emerald-900/50 text-[#d8e3db] text-xs leading-relaxed outline-none focus:border-emerald-500/80 resize-none transition-colors"
+                      placeholder="e.g. I work with TypeScript and Python. Provide clean, well-tested code without unnecessary filler."
+                      className="w-full p-3 rounded-xl bg-[#111111] border border-[#262626] text-[#FFFFFF] text-xs leading-relaxed outline-none focus:border-[#404040] resize-none transition-colors"
                     />
                   </div>
                 </div>
@@ -309,75 +268,77 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 className="text-base font-medium text-emerald-100">
+                      <h3 className="text-sm font-semibold text-[#FFFFFF]">
                         Personalization & Memory
                       </h3>
-                      <p className="text-xs text-emerald-400/70">
-                        Enable GPT Hub to recall personal context between chats.
+                      <p className="text-xs text-[#737373]">
+                        Allow GPT Hub to recall helpful user context across chats.
                       </p>
                     </div>
                     <button
                       onClick={() =>
                         onUpdateSettings({ memoryEnabled: !settings.memoryEnabled })
                       }
-                      className={`w-11 h-6 rounded-full transition-colors relative cursor-pointer ${
-                        settings.memoryEnabled ? 'bg-emerald-500' : 'bg-emerald-950 border border-emerald-800'
+                      className={`w-10 h-5 rounded-full transition-colors relative cursor-pointer border ${
+                        settings.memoryEnabled
+                          ? 'bg-[#FFFFFF] border-[#FFFFFF]'
+                          : 'bg-[#171717] border-[#333333]'
                       }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-full bg-white shadow-md transform transition-transform ${
-                          settings.memoryEnabled ? 'translate-x-5' : 'translate-x-0.5'
+                        className={`w-4 h-4 rounded-full shadow-sm transform transition-transform ${
+                          settings.memoryEnabled
+                            ? 'translate-x-5 bg-[#000000]'
+                            : 'translate-x-0.5 bg-[#737373]'
                         }`}
                       />
                     </button>
                   </div>
 
-                  {/* Add Memory Form */}
                   <form onSubmit={handleAddMemorySubmit} className="flex gap-2">
                     <input
                       type="text"
                       value={newMemoryText}
                       onChange={(e) => setNewMemoryText(e.target.value)}
-                      placeholder="Add a new memory (e.g., 'Prefers Tailwind CSS')"
-                      className="flex-1 px-3.5 py-2 rounded-xl bg-[#0b140f] border border-emerald-900/40 text-xs text-emerald-100 outline-none focus:border-emerald-500"
+                      placeholder="Add a new memory (e.g. 'Prefers dark monochrome UI')"
+                      className="flex-1 px-3 py-2 rounded-xl bg-[#111111] border border-[#262626] text-xs text-[#FFFFFF] outline-none focus:border-[#404040]"
                     />
                     <button
                       type="submit"
                       disabled={!newMemoryText.trim()}
-                      className="flex items-center gap-1 px-3 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-black font-semibold text-xs transition-colors"
+                      className="flex items-center gap-1 px-3 py-2 rounded-xl bg-[#FFFFFF] hover:bg-[#E5E5E5] disabled:opacity-30 text-[#000000] font-semibold text-xs transition-colors"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add</span>
                     </button>
                   </form>
 
-                  {/* Memories List */}
-                  <div className="space-y-2 mt-3">
-                    <div className="flex items-center justify-between text-xs text-emerald-400/80 font-medium">
-                      <span>Saved Memories ({memories.length})</span>
+                  <div className="space-y-1.5 mt-2">
+                    <div className="flex items-center justify-between text-xs text-[#737373] font-medium">
+                      <span>Saved Facts ({memories.length})</span>
                       {memories.length > 0 && (
                         <button
                           onClick={onClearMemories}
-                          className="text-red-400 hover:text-red-300 transition-colors"
+                          className="text-[#A3A3A3] hover:text-[#FFFFFF] transition-colors"
                         >
                           Clear All
                         </button>
                       )}
                     </div>
                     {memories.length === 0 ? (
-                      <div className="p-4 rounded-xl bg-[#0b140f] border border-emerald-950/60 text-xs text-emerald-500/60 text-center">
-                        No memories recorded yet.
+                      <div className="p-4 rounded-xl bg-[#111111] border border-[#222222] text-xs text-[#666666] text-center">
+                        No saved memories yet.
                       </div>
                     ) : (
                       memories.map((mem) => (
                         <div
                           key={mem.id}
-                          className="flex items-center justify-between p-2.5 rounded-xl bg-[#0b140f] border border-emerald-950/60 text-xs text-[#dbe5de]"
+                          className="flex items-center justify-between p-2.5 rounded-xl bg-[#111111] border border-[#222222] text-xs text-[#D4D4D4]"
                         >
                           <span className="flex-1 pr-2">{mem.content}</span>
                           <button
                             onClick={() => onDeleteMemory(mem.id)}
-                            className="p-1 rounded text-emerald-500/60 hover:text-red-400 transition-colors"
+                            className="p-1 rounded text-[#737373] hover:text-[#FFFFFF] transition-colors"
                             aria-label="Delete memory"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -391,35 +352,35 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Voice Tab */}
               {activeTab === 'voice' && (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div>
-                    <h3 className="text-base font-medium text-emerald-100 mb-1">
-                      AI Voice Persona
+                    <h3 className="text-sm font-semibold text-[#FFFFFF] mb-1">
+                      Spoken Response Voice
                     </h3>
-                    <p className="text-xs text-emerald-400/70 mb-3">
-                      Select the prebuilt voice model used for spoken AI responses.
+                    <p className="text-xs text-[#737373] mb-3">
+                      Select voice model for reading AI responses aloud.
                     </p>
-                    <div className="space-y-2.5">
+                    <div className="space-y-2">
                       {voices.map((v) => (
                         <button
                           key={v.id}
                           onClick={() => onUpdateSettings({ speechVoice: v.id })}
-                          className={`w-full p-3 rounded-2xl border text-left flex items-center justify-between transition-all ${
+                          className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
                             settings.speechVoice === v.id
-                              ? 'bg-emerald-950/60 border-emerald-500 text-emerald-100 shadow-[0_0_12px_rgba(16,185,129,0.2)]'
-                              : 'bg-[#0b140f] border-emerald-950/60 text-emerald-400/70 hover:border-emerald-700/40'
+                              ? 'bg-[#171717] border-[#404040] text-[#FFFFFF]'
+                              : 'bg-[#111111] border-[#222222] text-[#A3A3A3] hover:bg-[#141414] hover:text-[#FFFFFF]'
                           }`}
                         >
                           <div>
-                            <div className="font-semibold text-xs text-emerald-200">
+                            <div className="font-medium text-xs text-[#FFFFFF]">
                               {v.name}
                             </div>
-                            <div className="text-[11px] text-emerald-400/60">
+                            <div className="text-[11px] text-[#737373]">
                               {v.description}
                             </div>
                           </div>
                           {settings.speechVoice === v.id && (
-                            <Check className="w-4 h-4 text-emerald-400" />
+                            <Check className="w-4 h-4 text-[#FFFFFF]" />
                           )}
                         </button>
                       ))}
@@ -430,33 +391,27 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Account & Plan Tab */}
               {activeTab === 'account' && (
-                <div className="space-y-4">
-                  <div className="p-4 rounded-2xl bg-gradient-to-br from-emerald-950/40 to-[#0c1611] border border-emerald-800/40 flex items-center justify-between">
+                <div className="space-y-3">
+                  <div className="p-4 rounded-xl bg-[#111111] border border-[#262626] flex items-center justify-between">
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold text-emerald-100 text-sm">
+                        <span className="font-semibold text-[#FFFFFF] text-sm">
                           {settings.userName}
                         </span>
-                        <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
-                            settings.isPro
-                              ? 'bg-emerald-500 text-black'
-                              : 'bg-emerald-950 text-emerald-400 border border-emerald-700/50'
-                          }`}
-                        >
-                          {settings.isPro ? 'Pro Member' : 'Free Tier'}
+                        <span className="text-[10px] px-2 py-0.2 rounded-full font-medium bg-[#1F1F1F] border border-[#333333] text-[#D4D4D4]">
+                          {settings.isPro ? 'Pro Member' : 'Standard'}
                         </span>
                       </div>
-                      <div className="text-xs text-emerald-400/70 mt-0.5">
+                      <div className="text-xs text-[#737373] mt-0.5">
                         {settings.userEmail}
                       </div>
                     </div>
                     {!settings.isPro && (
                       <button
                         onClick={onOpenPro}
-                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs shadow-[0_0_12px_rgba(16,185,129,0.3)] transition-all"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] font-medium text-xs transition-all active:scale-95"
                       >
-                        <Crown className="w-3.5 h-3.5 fill-black" />
+                        <Crown className="w-3.5 h-3.5 fill-[#000000]" />
                         <span>Upgrade</span>
                       </button>
                     )}
@@ -466,42 +421,33 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* Data & Storage Tab */}
               {activeTab === 'data' && (
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-base font-medium text-emerald-100 mb-1">
-                      Data Export & Privacy
-                    </h3>
-                    <p className="text-xs text-emerald-400/70 mb-3">
-                      Export your complete conversation history or reset local data.
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-2xl bg-[#0b140f] border border-emerald-950/60 flex items-center justify-between">
+                <div className="space-y-3">
+                  <div className="p-3.5 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-xs text-emerald-100">
-                        Export Conversations (JSON)
+                      <div className="font-medium text-xs text-[#FFFFFF]">
+                        Export Chats (JSON)
                       </div>
-                      <div className="text-[11px] text-emerald-400/60">
-                        Download all active conversations and message logs.
+                      <div className="text-[11px] text-[#737373]">
+                        Download local conversation history.
                       </div>
                     </div>
                     <button
                       onClick={exportAllData}
                       disabled={isExporting}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-700/50 text-emerald-300 text-xs font-medium transition-colors"
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#171717] hover:bg-[#222222] border border-[#2A2A2A] text-[#FFFFFF] text-xs font-medium transition-colors"
                     >
                       <Download className="w-3.5 h-3.5" />
                       <span>{isExporting ? 'Exporting...' : 'Export'}</span>
                     </button>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-[#0b140f] border border-red-950/60 flex items-center justify-between">
+                  <div className="p-3.5 rounded-xl bg-[#111111] border border-[#222222] flex items-center justify-between">
                     <div>
-                      <div className="font-medium text-xs text-red-200">
-                        Delete All Chats
+                      <div className="font-medium text-xs text-[#FFFFFF]">
+                        Clear All Chats
                       </div>
-                      <div className="text-[11px] text-red-400/60">
-                        Permanently removes all local conversations.
+                      <div className="text-[11px] text-[#737373]">
+                        Permanently delete all local chats.
                       </div>
                     </div>
                     {clearChatConfirm ? (
@@ -511,13 +457,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                             onClearAllChats();
                             setClearChatConfirm(false);
                           }}
-                          className="px-2.5 py-1 rounded-lg bg-red-600 hover:bg-red-500 text-white text-xs font-semibold"
+                          className="px-2.5 py-1 rounded-lg bg-[#FFFFFF] text-[#000000] text-xs font-semibold"
                         >
                           Confirm
                         </button>
                         <button
                           onClick={() => setClearChatConfirm(false)}
-                          className="px-2.5 py-1 rounded-lg bg-neutral-800 text-xs text-neutral-300"
+                          className="px-2.5 py-1 rounded-lg bg-[#222222] text-xs text-[#A3A3A3]"
                         >
                           Cancel
                         </button>
@@ -525,7 +471,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     ) : (
                       <button
                         onClick={() => setClearChatConfirm(true)}
-                        className="px-3 py-1.5 rounded-xl bg-red-950/60 hover:bg-red-900/60 border border-red-800/40 text-red-300 text-xs font-medium transition-colors"
+                        className="px-3 py-1.5 rounded-lg bg-[#171717] hover:bg-[#222222] border border-[#2A2A2A] text-[#A3A3A3] hover:text-[#FFFFFF] text-xs font-medium transition-colors"
                       >
                         Clear All
                       </button>
@@ -536,29 +482,23 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
               {/* About Tab */}
               {activeTab === 'about' && (
-                <div className="space-y-4 text-xs text-emerald-300/80 leading-relaxed">
-                  <div className="flex items-center gap-3 p-4 rounded-2xl bg-[#0b140f] border border-emerald-900/40">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-base">
+                <div className="space-y-3 text-xs text-[#A3A3A3] leading-relaxed">
+                  <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[#111111] border border-[#222222]">
+                    <div className="w-9 h-9 rounded-xl bg-[#171717] border border-[#262626] flex items-center justify-center text-[#FFFFFF] font-bold text-sm">
                       GH
                     </div>
                     <div>
-                      <h4 className="font-semibold text-emerald-100 text-sm">
+                      <h4 className="font-semibold text-[#FFFFFF] text-sm">
                         GPT Hub
                       </h4>
-                      <p className="text-[11px] text-emerald-400/60">
-                        Version 2.4.0 • Enterprise Emerald Edition
+                      <p className="text-[11px] text-[#737373]">
+                        Monochrome Edition 2.5.0
                       </p>
                     </div>
                   </div>
                   <p>
-                    GPT Hub is built for high-performance generative interaction, deep reasoning, live web grounding, and specialized multi-modal tasks.
+                    GPT Hub delivers clean, modern AI interactions with progressive stream synthesis, deep reasoning Think Mode, and verified search grounding.
                   </p>
-                  <div className="p-3.5 rounded-xl bg-emerald-950/30 border border-emerald-900/40 text-[11px] space-y-1">
-                    <div>• Progressive streaming via Server-Sent Events (SSE)</div>
-                    <div>• Google Search grounding with direct citation verification</div>
-                    <div>• Multi-turn conversational memory & projects workspace</div>
-                    <div>• Live camera and device attachment visual inspection</div>
-                  </div>
                 </div>
               )}
             </div>
@@ -577,13 +517,13 @@ const TabButton: React.FC<{
 }> = ({ active, onClick, icon: Icon, label }) => (
   <button
     onClick={onClick}
-    className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${
+    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-all text-left whitespace-nowrap md:whitespace-normal ${
       active
-        ? 'bg-emerald-500/20 text-emerald-200 border border-emerald-500/40 shadow-sm'
-        : 'text-emerald-400/70 hover:text-emerald-100 hover:bg-emerald-950/40'
+        ? 'bg-[#171717] text-[#FFFFFF] border border-[#262626]'
+        : 'text-[#737373] hover:text-[#FFFFFF] hover:bg-[#141414]'
     }`}
   >
-    <Icon className="w-4 h-4 flex-shrink-0" />
+    <Icon className="w-3.5 h-3.5 flex-shrink-0" />
     <span>{label}</span>
   </button>
 );

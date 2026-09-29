@@ -62,7 +62,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
     } catch (err: any) {
       console.error('Camera access error:', err);
       if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        setCameraError('Camera access was denied. Please allow camera permissions in your browser settings.');
+        setCameraError('Camera access was denied. Please allow camera permissions.');
       } else {
         setCameraError(err.message || 'Unable to access camera.');
       }
@@ -84,7 +84,7 @@ export const CameraModal: React.FC<CameraModalProps> = ({
     if (!videoRef.current || !canvasRef.current) return;
 
     setIsShutterActive(true);
-    setTimeout(() => setIsShutterActive(false), 200);
+    setTimeout(() => setIsShutterActive(false), 150);
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -94,7 +94,6 @@ export const CameraModal: React.FC<CameraModalProps> = ({
     const ctx = canvas.getContext('2d');
     if (ctx) {
       if (facingMode === 'user') {
-        // Mirror front camera
         ctx.translate(canvas.width, 0);
         ctx.scale(-1, 1);
       }
@@ -134,45 +133,46 @@ export const CameraModal: React.FC<CameraModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/85 backdrop-blur-md"
+          className="fixed inset-0 bg-black/85 backdrop-blur-sm"
         />
 
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-          className="relative z-10 w-full max-w-md bg-[#09110c] border border-emerald-800/40 rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+          exit={{ scale: 0.96, opacity: 0 }}
+          transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+          className="relative z-10 w-full max-w-md bg-[#0A0A0A] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
         >
           {/* Top Bar */}
-          <div className="flex items-center justify-between px-5 py-3.5 border-b border-emerald-900/40 bg-[#0c1610]">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-[#1A1A1A] bg-[#0E0E0E]">
             <div className="flex items-center gap-2">
-              <Camera className="w-4 h-4 text-emerald-400" />
-              <span className="text-sm font-semibold text-emerald-100">
-                GPT Hub Camera
+              <Camera className="w-4 h-4 text-[#FFFFFF]" />
+              <span className="text-xs font-semibold text-[#FFFFFF]">
+                Camera
               </span>
             </div>
             <button
               onClick={onClose}
-              className="p-1 rounded-full text-emerald-400/80 hover:text-emerald-200 hover:bg-emerald-950/60 transition-colors"
+              className="p-1 rounded-lg text-[#737373] hover:text-[#FFFFFF] hover:bg-[#171717] transition-colors"
               aria-label="Close camera"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Viewfinder Area */}
           <div className="relative aspect-[4/3] bg-black flex items-center justify-center overflow-hidden">
             {cameraError ? (
-              <div className="p-6 text-center space-y-3">
-                <AlertCircle className="w-10 h-10 text-emerald-500/80 mx-auto" />
-                <p className="text-sm text-emerald-200">{cameraError}</p>
+              <div className="p-6 text-center space-y-2.5">
+                <AlertCircle className="w-8 h-8 text-[#737373] mx-auto" />
+                <p className="text-xs text-[#A3A3A3]">{cameraError}</p>
                 <button
                   onClick={startCamera}
-                  className="px-4 py-1.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-medium border border-emerald-500/30"
+                  className="px-3 py-1.5 rounded-lg bg-[#171717] hover:bg-[#222222] text-[#FFFFFF] text-xs font-medium border border-[#333333]"
                 >
-                  Retry Camera
+                  Retry
                 </button>
               </div>
             ) : capturedPhoto ? (
@@ -192,10 +192,9 @@ export const CameraModal: React.FC<CameraModalProps> = ({
                     facingMode === 'user' ? 'scale-x-[-1]' : ''
                   }`}
                 />
-                {/* Viewfinder crosshairs */}
-                <div className="absolute inset-8 border border-dashed border-emerald-400/30 rounded-2xl pointer-events-none" />
+                <div className="absolute inset-6 border border-dashed border-white/20 rounded-xl pointer-events-none" />
                 {isShutterActive && (
-                  <div className="absolute inset-0 bg-white opacity-80 pointer-events-none" />
+                  <div className="absolute inset-0 bg-white opacity-60 pointer-events-none" />
                 )}
               </>
             )}
@@ -203,21 +202,21 @@ export const CameraModal: React.FC<CameraModalProps> = ({
           </div>
 
           {/* Bottom Controls */}
-          <div className="p-5 flex items-center justify-around bg-[#0c1610] border-t border-emerald-900/40">
+          <div className="p-4 flex items-center justify-around bg-[#0E0E0E] border-t border-[#1A1A1A]">
             {capturedPhoto ? (
               <>
                 <button
                   onClick={retakePhoto}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 text-sm font-medium border border-emerald-800/40 transition-all"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#171717] hover:bg-[#222222] text-[#FFFFFF] text-xs font-medium border border-[#262626] transition-all"
                 >
-                  <RefreshCw className="w-4 h-4" />
+                  <RefreshCw className="w-3.5 h-3.5" />
                   <span>Retake</span>
                 </button>
                 <button
                   onClick={confirmPhoto}
-                  className="flex items-center gap-1.5 px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-semibold shadow-[0_0_15px_rgba(16,185,129,0.4)] transition-all active:scale-95"
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] text-xs font-semibold transition-all active:scale-95"
                 >
-                  <Check className="w-4 h-4 stroke-[2.5]" />
+                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Use Photo</span>
                 </button>
               </>
@@ -226,22 +225,22 @@ export const CameraModal: React.FC<CameraModalProps> = ({
                 <button
                   onClick={switchCamera}
                   disabled={Boolean(cameraError)}
-                  className="p-3 rounded-full bg-emerald-950/70 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/40 transition-colors disabled:opacity-40"
+                  className="p-2.5 rounded-xl bg-[#141414] hover:bg-[#1C1C1C] text-[#A3A3A3] hover:text-[#FFFFFF] border border-[#222222] transition-colors disabled:opacity-30"
                   title="Switch camera"
                   aria-label="Switch camera"
                 >
-                  <RefreshCw className="w-5 h-5" />
+                  <RefreshCw className="w-4 h-4" />
                 </button>
                 <button
                   onClick={takeSnapshot}
                   disabled={Boolean(cameraError)}
-                  className="w-16 h-16 rounded-full border-4 border-emerald-500/80 bg-emerald-500 hover:bg-emerald-400 flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all active:scale-90 disabled:opacity-40"
+                  className="w-14 h-14 rounded-full border-2 border-[#404040] bg-[#FFFFFF] hover:bg-[#E5E5E5] flex items-center justify-center transition-all active:scale-90 disabled:opacity-30"
                   title="Take photo"
                   aria-label="Take photo"
                 >
-                  <div className="w-12 h-12 rounded-full border-2 border-black/30" />
+                  <div className="w-11 h-11 rounded-full border border-black/20" />
                 </button>
-                <div className="w-11" /> {/* Spacer */}
+                <div className="w-10" />
               </>
             )}
           </div>

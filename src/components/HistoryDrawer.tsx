@@ -16,7 +16,7 @@ import {
   ArchiveRestore,
   Check,
 } from 'lucide-react';
-import { Conversation, Project, Assistant } from '../types';
+import { Conversation, Project } from '../types';
 
 interface HistoryDrawerProps {
   isOpen: boolean;
@@ -63,17 +63,14 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
   // Filter conversations
   const filteredConversations = useMemo(() => {
     return conversations.filter((conv) => {
-      // Archived filter
       if (showArchived ? !conv.isArchived : conv.isArchived) {
         return false;
       }
 
-      // Project filter
       if (activeProject && conv.projectId !== activeProject.id) {
         return false;
       }
 
-      // Search query filter (matches title or any message content!)
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
         const matchesTitle = conv.title.toLowerCase().includes(query);
@@ -95,7 +92,6 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
     const last7Days: Conversation[] = [];
     const older: Conversation[] = [];
 
-    const now = Date.now();
     const oneDay = 86400000;
     const todayStart = new Date().setHours(0, 0, 0, 0);
     const yesterdayStart = todayStart - oneDay;
@@ -149,36 +145,36 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
         )}
       </AnimatePresence>
 
-      {/* Drawer Panel */}
+      {/* Drawer Panel - Light-Black Morph Surface */}
       <motion.aside
         initial={false}
         animate={{
           x: isOpen ? 0 : -320,
           opacity: isOpen ? 1 : 0,
         }}
-        transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-        className={`fixed top-0 bottom-0 left-0 z-40 w-72 sm:w-80 bg-[#070d0a] border-r border-emerald-950/70 flex flex-col shadow-2xl ${
+        transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+        className={`fixed top-0 bottom-0 left-0 z-40 w-72 sm:w-80 bg-[#0A0A0A] border-r border-[#1A1A1A] flex flex-col shadow-2xl ${
           isOpen ? 'pointer-events-auto' : 'pointer-events-none'
         }`}
       >
         {/* Top Header */}
-        <div className="p-3.5 border-b border-emerald-950/60 flex items-center justify-between">
+        <div className="p-3.5 border-b border-[#1A1A1A] flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-bold text-xs">
+            <div className="w-7 h-7 rounded-lg bg-[#141414] border border-[#262626] flex items-center justify-center text-[#FFFFFF] font-bold text-xs">
               GH
             </div>
-            <span className="font-bold text-sm text-emerald-100 tracking-tight">
+            <span className="font-semibold text-sm text-[#FFFFFF] tracking-tight">
               GPT Hub
             </span>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-emerald-400/80 hover:text-emerald-100 hover:bg-emerald-950/60 transition-colors"
+            className="p-1.5 rounded-lg text-[#A3A3A3] hover:text-[#FFFFFF] hover:bg-[#171717] transition-colors"
             title="Close sidebar"
             aria-label="Close sidebar"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -189,13 +185,13 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
               onNewChat();
               onClose();
             }}
-            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all active:scale-98"
+            className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] font-semibold text-xs transition-all active:scale-98"
           >
             <div className="flex items-center gap-2">
               <Plus className="w-4 h-4 stroke-[2.5]" />
               <span>New Chat</span>
             </div>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-black/20 text-black/90 font-mono">
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-black/10 text-black font-mono">
               ⌘N
             </span>
           </button>
@@ -204,18 +200,18 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
         {/* Search Input */}
         <div className="px-3 pb-2">
           <div className="relative flex items-center">
-            <Search className="absolute left-3 w-3.5 h-3.5 text-emerald-500/60 pointer-events-none" />
+            <Search className="absolute left-3 w-3.5 h-3.5 text-[#666666] pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search conversations..."
-              className="w-full pl-8 pr-7 py-2 rounded-xl bg-[#09140e] border border-emerald-950/80 text-xs text-emerald-100 placeholder-emerald-600/60 outline-none focus:border-emerald-600/50 transition-colors"
+              className="w-full pl-8 pr-7 py-2 rounded-xl bg-[#111111] border border-[#222222] text-xs text-[#FFFFFF] placeholder-[#666666] outline-none focus:border-[#404040] transition-colors"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-2.5 text-emerald-400/70 hover:text-white"
+                className="absolute right-2.5 text-[#737373] hover:text-[#FFFFFF]"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -225,14 +221,14 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
 
         {/* Workspace banner if filtered */}
         {activeProject && (
-          <div className="mx-3 mb-2 px-2.5 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-800/40 flex items-center justify-between text-xs">
+          <div className="mx-3 mb-2 px-2.5 py-1.5 rounded-xl bg-[#141414] border border-[#262626] flex items-center justify-between text-xs">
             <div className="flex items-center gap-1.5 truncate">
-              <FolderOpen className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-              <span className="text-emerald-200 truncate">{activeProject.name}</span>
+              <FolderOpen className="w-3.5 h-3.5 text-[#A3A3A3] flex-shrink-0" />
+              <span className="text-[#D4D4D4] truncate">{activeProject.name}</span>
             </div>
             <button
               onClick={onOpenProjects}
-              className="text-[10px] text-emerald-400/80 hover:text-white"
+              className="text-[10px] text-[#A3A3A3] hover:text-[#FFFFFF]"
             >
               Change
             </button>
@@ -240,11 +236,11 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
         )}
 
         {/* Archive Toggle Button */}
-        <div className="px-3 pb-2 flex items-center justify-between text-[11px] text-emerald-400/70">
-          <span>{showArchived ? 'Archived Chats' : 'Chat History'}</span>
+        <div className="px-3 pb-2 flex items-center justify-between text-[11px] text-[#737373]">
+          <span>{showArchived ? 'Archived' : 'Recent Chats'}</span>
           <button
             onClick={() => setShowArchived((prev) => !prev)}
-            className="hover:text-emerald-200 transition-colors flex items-center gap-1"
+            className="hover:text-[#FFFFFF] transition-colors flex items-center gap-1"
           >
             {showArchived ? (
               <>
@@ -254,16 +250,16 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
             ) : (
               <>
                 <Archive className="w-3 h-3" />
-                <span>Show Archived</span>
+                <span>Archived</span>
               </>
             )}
           </button>
         </div>
 
         {/* Scrollable Conversations List */}
-        <div className="flex-1 overflow-y-auto px-2 space-y-4 text-xs">
+        <div className="flex-1 overflow-y-auto px-2 space-y-3.5 text-xs">
           {filteredConversations.length === 0 ? (
-            <div className="p-6 text-center text-emerald-500/50">
+            <div className="p-6 text-center text-[#666666]">
               {searchQuery ? 'No matching chats found.' : 'No conversations yet.'}
             </div>
           ) : (
@@ -372,15 +368,15 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
         </div>
 
         {/* Bottom Drawer Actions */}
-        <div className="p-3 border-t border-emerald-950/60 space-y-1 bg-[#09120e]">
+        <div className="p-3 border-t border-[#1A1A1A] space-y-0.5 bg-[#0A0A0A]">
           <button
             onClick={() => {
               onOpenAssistants();
               onClose();
             }}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-emerald-300/80 hover:text-emerald-100 hover:bg-emerald-950/60 transition-all text-left"
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-[#A3A3A3] hover:text-[#FFFFFF] hover:bg-[#141414] transition-all text-left"
           >
-            <Bot className="w-4 h-4 text-emerald-400" />
+            <Bot className="w-4 h-4 text-[#A3A3A3]" />
             <span>AI Assistants (Hub GPTs)</span>
           </button>
 
@@ -389,10 +385,10 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
               onOpenProjects();
               onClose();
             }}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-emerald-300/80 hover:text-emerald-100 hover:bg-emerald-950/60 transition-all text-left"
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-[#A3A3A3] hover:text-[#FFFFFF] hover:bg-[#141414] transition-all text-left"
           >
-            <FolderOpen className="w-4 h-4 text-emerald-400" />
-            <span>Workspaces & Projects</span>
+            <FolderOpen className="w-4 h-4 text-[#A3A3A3]" />
+            <span>Workspaces</span>
           </button>
 
           <button
@@ -400,9 +396,9 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
               onOpenSettings();
               onClose();
             }}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-emerald-300/80 hover:text-emerald-100 hover:bg-emerald-950/60 transition-all text-left"
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium text-[#A3A3A3] hover:text-[#FFFFFF] hover:bg-[#141414] transition-all text-left"
           >
-            <Settings className="w-4 h-4 text-emerald-400" />
+            <Settings className="w-4 h-4 text-[#A3A3A3]" />
             <span>Settings & Memory</span>
           </button>
 
@@ -412,16 +408,16 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                 onOpenPro();
                 onClose();
               }}
-              className="w-full mt-2 flex items-center justify-between p-2.5 rounded-xl bg-gradient-to-r from-emerald-950 to-[#0d1d14] border border-emerald-700/50 hover:border-emerald-500 transition-all"
+              className="w-full mt-2 flex items-center justify-between p-2.5 rounded-xl bg-[#111111] hover:bg-[#171717] border border-[#222222] hover:border-[#333333] transition-all"
             >
               <div className="flex items-center gap-2">
-                <Crown className="w-4 h-4 text-emerald-400 fill-emerald-400" />
+                <Crown className="w-3.5 h-3.5 text-[#FFFFFF]" />
                 <div className="text-left">
-                  <div className="text-xs font-semibold text-emerald-100">
+                  <div className="text-xs font-medium text-[#FFFFFF]">
                     Upgrade to Pro
                   </div>
-                  <div className="text-[10px] text-emerald-400/70">
-                    Think Mode & Unlimited Grounding
+                  <div className="text-[10px] text-[#737373]">
+                    Deep reasoning & priority access
                   </div>
                 </div>
               </div>
@@ -461,8 +457,8 @@ const ConversationSection: React.FC<{
   onDelete,
 }) => {
   return (
-    <div className="space-y-1">
-      <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-500/60">
+    <div className="space-y-0.5">
+      <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#666666]">
         {title}
       </div>
       {conversations.map((conv) => {
@@ -474,8 +470,8 @@ const ConversationSection: React.FC<{
             key={conv.id}
             className={`group relative flex items-center justify-between px-2.5 py-2 rounded-xl transition-all cursor-pointer ${
               isSelected
-                ? 'bg-emerald-950/80 text-emerald-100 border border-emerald-700/50 shadow-sm'
-                : 'text-emerald-300/80 hover:bg-emerald-950/40 hover:text-emerald-100'
+                ? 'bg-[#171717] text-[#FFFFFF] border border-[#262626]'
+                : 'text-[#A3A3A3] hover:bg-[#121212] hover:text-[#FFFFFF]'
             }`}
           >
             {isEditing ? (
@@ -488,13 +484,13 @@ const ConversationSection: React.FC<{
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') onSaveRename(conv.id);
                   }}
-                  className="flex-1 bg-emerald-950/90 border border-emerald-500 rounded px-1.5 py-0.5 text-xs text-white outline-none"
+                  className="flex-1 bg-[#141414] border border-[#333333] rounded px-1.5 py-0.5 text-xs text-[#FFFFFF] outline-none"
                 />
                 <button
                   onClick={() => onSaveRename(conv.id)}
-                  className="p-1 rounded bg-emerald-500 text-black hover:bg-emerald-400"
+                  className="p-1 rounded bg-[#FFFFFF] text-[#000000] hover:bg-[#E5E5E5]"
                 >
-                  <Check className="w-3 h-3 stroke-[3]" />
+                  <Check className="w-3 h-3 stroke-[2.5]" />
                 </button>
               </div>
             ) : (
@@ -503,9 +499,9 @@ const ConversationSection: React.FC<{
                   onClick={() => onSelect(conv.id)}
                   className="flex items-center gap-2 flex-1 min-w-0 pr-1"
                 >
-                  <MessageSquare className="w-3.5 h-3.5 text-emerald-500/70 flex-shrink-0" />
+                  <MessageSquare className="w-3.5 h-3.5 text-[#666666] flex-shrink-0" />
                   <span className="truncate text-xs font-normal">
-                    {conv.title || 'Untitled Chat'}
+                    {conv.title || 'Untitled'}
                   </span>
                 </div>
 
@@ -516,13 +512,13 @@ const ConversationSection: React.FC<{
                       e.stopPropagation();
                       onTogglePin(conv.id);
                     }}
-                    className={`p-1 rounded text-emerald-400 hover:text-white transition-colors ${
-                      conv.isPinned ? 'text-emerald-300' : ''
+                    className={`p-1 rounded text-[#737373] hover:text-[#FFFFFF] transition-colors ${
+                      conv.isPinned ? 'text-[#FFFFFF]' : ''
                     }`}
                     title={conv.isPinned ? 'Unpin' : 'Pin'}
                     aria-label={conv.isPinned ? 'Unpin' : 'Pin'}
                   >
-                    <Pin className={`w-3 h-3 ${conv.isPinned ? 'fill-emerald-400' : ''}`} />
+                    <Pin className={`w-3 h-3 ${conv.isPinned ? 'fill-[#FFFFFF]' : ''}`} />
                   </button>
 
                   <button
@@ -530,7 +526,7 @@ const ConversationSection: React.FC<{
                       e.stopPropagation();
                       onStartRename(conv);
                     }}
-                    className="p-1 rounded text-emerald-400 hover:text-white transition-colors"
+                    className="p-1 rounded text-[#737373] hover:text-[#FFFFFF] transition-colors"
                     title="Rename"
                     aria-label="Rename"
                   >
@@ -542,7 +538,7 @@ const ConversationSection: React.FC<{
                       e.stopPropagation();
                       onToggleArchive(conv.id);
                     }}
-                    className="p-1 rounded text-emerald-400 hover:text-white transition-colors"
+                    className="p-1 rounded text-[#737373] hover:text-[#FFFFFF] transition-colors"
                     title={conv.isArchived ? 'Restore' : 'Archive'}
                     aria-label={conv.isArchived ? 'Restore' : 'Archive'}
                   >
@@ -554,7 +550,7 @@ const ConversationSection: React.FC<{
                       e.stopPropagation();
                       onDelete(conv.id);
                     }}
-                    className="p-1 rounded text-emerald-400 hover:text-red-400 transition-colors"
+                    className="p-1 rounded text-[#737373] hover:text-[#FFFFFF] transition-colors"
                     title="Delete"
                     aria-label="Delete"
                   >

@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import {
   Sparkles,
-  Bot,
-  User,
   Copy,
   Check,
   RotateCcw,
@@ -14,11 +12,8 @@ import {
   Globe,
   ExternalLink,
   BrainCircuit,
-  AlertTriangle,
+  AlertCircle,
   FileText,
-  Table,
-  Image as ImageIcon,
-  CheckCircle2,
   Code,
   Search,
   PenTool,
@@ -73,7 +68,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
   const handleCopy = (content: string, id: string) => {
     navigator.clipboard.writeText(content);
     setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 2000);
+    setTimeout(() => setCopiedId(null), 1800);
   };
 
   const startEdit = (index: number, content: string) => {
@@ -108,7 +103,6 @@ export const ChatView: React.FC<ChatViewProps> = ({
     stopAudio();
     setSpeakingMessageId(msg.id);
 
-    // Try backend high-fidelity TTS first
     try {
       const audioUrl = await ApiService.requestTTS(msg.content, speechVoice);
       if (audioUrl) {
@@ -120,7 +114,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
         return;
       }
     } catch {
-      // Fallback to browser speech synthesis
+      // Fallback
     }
 
     fallbackBrowserSpeech(msg.content);
@@ -132,7 +126,6 @@ export const ChatView: React.FC<ChatViewProps> = ({
       return;
     }
 
-    // Clean markdown before speaking
     const cleanText = text
       .replace(/```[\s\S]*?```/g, 'Code block omitted.')
       .replace(/[*_#`\[\]]/g, '');
@@ -148,85 +141,81 @@ export const ChatView: React.FC<ChatViewProps> = ({
   // Suggested Prompts for Empty State
   const starterPrompts = [
     {
-      title: 'Analyze Complex Problem',
-      desc: 'Use Think Mode deep reasoning to break down a multi-variable logic question',
+      title: 'Analyze Complex Logic',
+      desc: 'Use Think Mode deep reasoning to solve a multi-variable problem',
       icon: Cpu,
-      prompt: 'Can you solve this logic and game theory problem with step-by-step reasoning: Three prisoners are given red and blue hats...',
+      prompt: 'Can you solve this logic problem with step-by-step reasoning: Three prisoners are given red and blue hats...',
     },
     {
-      title: 'Live Web Grounding',
-      desc: 'Search recent technological breakthroughs and retrieve verified source citations',
+      title: 'Web Grounding with Citations',
+      desc: 'Search current tech breakthroughs and retrieve verified source links',
       icon: Search,
-      prompt: 'What are the most significant AI and robotics announcements this week? Please provide citations and sources.',
+      prompt: 'What are the most notable announcements in AI this week? Please provide direct web sources.',
     },
     {
       title: 'Code Architecture Review',
-      desc: 'Refactor and optimize full-stack TypeScript code with best practices',
+      desc: 'Refactor and optimize TypeScript state management with clean patterns',
       icon: Code,
       prompt: 'Review and optimize a high-throughput React state management pattern with event-driven streaming.',
     },
     {
-      title: 'Executive Summary & Writing',
-      desc: 'Draft an elegant, persuasive technical proposal or briefing document',
+      title: 'Technical Proposal Draft',
+      desc: 'Draft an executive briefing or implementation blueprint',
       icon: PenTool,
       prompt: 'Draft an executive briefing on implementing autonomous multi-agent systems for enterprise workflows.',
     },
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6 max-w-4xl w-full mx-auto">
+    <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-6 max-w-3xl w-full mx-auto">
       {/* Empty State */}
       {messages.length === 0 ? (
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4"
+          transition={{ duration: 0.25 }}
+          className="min-h-[55vh] flex flex-col items-center justify-center text-center px-4"
         >
-          {/* Logo badge with emerald glow */}
-          <div className="relative mb-6">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-gradient-to-br from-emerald-500/25 via-[#0c1a12] to-[#070d0a] border border-emerald-500/40 flex items-center justify-center shadow-[0_0_35px_rgba(16,185,129,0.25)] emerald-glow">
-              <span className="font-extrabold text-2xl sm:text-3xl text-emerald-400 tracking-tight">
-                GH
-              </span>
-            </div>
-            <div className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-emerald-500 text-black shadow-md">
-              <Sparkles className="w-3.5 h-3.5" />
-            </div>
+          {/* Logo badge - Restrained Monochrome */}
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#111111] border border-[#262626] flex items-center justify-center mb-5 shadow-sm">
+            <span className="font-bold text-xl sm:text-2xl text-[#FFFFFF] tracking-tight">
+              GH
+            </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight mb-2">
+          <h1 className="text-xl sm:text-2xl font-semibold text-[#FFFFFF] tracking-tight mb-2">
             {assistant && assistant.id !== 'default'
               ? assistant.name
               : 'What would you like to solve?'}
           </h1>
-          <p className="text-xs sm:text-sm text-emerald-300/70 max-w-md mx-auto mb-8 leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#A3A3A3] max-w-md mx-auto mb-8 leading-relaxed">
             {assistant && assistant.id !== 'default'
               ? assistant.description
-              : 'GPT Hub blends progressive stream synthesis, deep reasoning Think Mode, and real-time Google search grounding.'}
+              : 'GPT Hub provides progressive streaming, deep reasoning Think Mode, and verified search grounding.'}
           </p>
 
           {/* Starter Prompts Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 w-full max-w-xl text-left">
             {starterPrompts.map((card, idx) => {
               const Icon = card.icon;
               return (
                 <motion.button
                   key={idx}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  whileHover={{ scale: 1.015 }}
+                  whileTap={{ scale: 0.985 }}
+                  transition={{ duration: 0.15 }}
                   onClick={() => onSendSuggestedPrompt(card.prompt)}
-                  className="p-3.5 sm:p-4 rounded-2xl bg-[#09130e]/80 hover:bg-emerald-950/40 border border-emerald-900/40 hover:border-emerald-600/50 transition-all shadow-md group cursor-pointer"
+                  className="p-3.5 rounded-xl bg-[#0A0A0A] hover:bg-[#141414] border border-[#222222] hover:border-[#333333] transition-all group cursor-pointer"
                 >
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <div className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-400 group-hover:bg-emerald-500/25 transition-colors">
-                      <Icon className="w-4 h-4" />
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="p-1 rounded-lg bg-[#171717] text-[#FFFFFF] group-hover:bg-[#222222] transition-colors">
+                      <Icon className="w-3.5 h-3.5" />
                     </div>
-                    <span className="font-semibold text-xs sm:text-sm text-emerald-100 group-hover:text-emerald-300 transition-colors">
+                    <span className="font-medium text-xs text-[#FFFFFF]">
                       {card.title}
                     </span>
                   </div>
-                  <p className="text-[11px] sm:text-xs text-emerald-400/60 leading-relaxed line-clamp-2">
+                  <p className="text-[11px] text-[#737373] leading-relaxed line-clamp-2">
                     {card.desc}
                   </p>
                 </motion.button>
@@ -244,9 +233,9 @@ export const ChatView: React.FC<ChatViewProps> = ({
             return (
               <motion.div
                 key={msg.id}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.2 }}
                 className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
               >
                 {/* User Message */}
@@ -254,25 +243,25 @@ export const ChatView: React.FC<ChatViewProps> = ({
                   <div className="max-w-[85%] sm:max-w-[75%] space-y-2">
                     {/* User Attached Media */}
                     {msg.attachments && msg.attachments.length > 0 && (
-                      <div className="flex flex-wrap gap-2 justify-end mb-1.5">
+                      <div className="flex flex-wrap gap-2 justify-end mb-1">
                         {msg.attachments.map((att) => (
                           <div key={att.id} className="relative group">
                             {att.type === 'image' ? (
                               <button
                                 onClick={() => onOpenImage(att)}
-                                className="block rounded-xl overflow-hidden border border-emerald-700/40 shadow-md hover:border-emerald-400 transition-all cursor-pointer"
+                                className="block rounded-xl overflow-hidden border border-[#2A2A2A] hover:border-[#404040] transition-all cursor-pointer"
                                 title="Click to expand image"
                               >
                                 <img
                                   src={att.previewUrl || att.base64}
                                   alt={att.name}
-                                  className="w-28 sm:w-36 h-28 sm:h-36 object-cover"
+                                  className="w-24 sm:w-32 h-24 sm:h-32 object-cover"
                                 />
                               </button>
                             ) : (
-                              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-800/40 text-xs text-emerald-200">
-                                <FileText className="w-4 h-4 text-emerald-400" />
-                                <span className="truncate max-w-[140px]">
+                              <div className="flex items-center gap-2 p-2.5 rounded-xl bg-[#141414] border border-[#262626] text-xs text-[#E5E5E5]">
+                                <FileText className="w-3.5 h-3.5 text-[#A3A3A3]" />
+                                <span className="truncate max-w-[130px]">
                                   {att.name}
                                 </span>
                               </div>
@@ -284,23 +273,23 @@ export const ChatView: React.FC<ChatViewProps> = ({
 
                     {/* User Text Bubble or Edit Form */}
                     {isEditing ? (
-                      <div className="p-3 rounded-2xl bg-[#0e1d15] border border-emerald-500 w-full sm:w-[480px] shadow-lg">
+                      <div className="p-3 rounded-2xl bg-[#111111] border border-[#404040] w-full sm:w-[440px] shadow-lg">
                         <textarea
                           rows={3}
                           value={editContent}
                           onChange={(e) => setEditContent(e.target.value)}
-                          className="w-full bg-transparent text-sm text-emerald-100 outline-none resize-none leading-relaxed"
+                          className="w-full bg-transparent text-sm text-[#FFFFFF] outline-none resize-none leading-relaxed"
                         />
                         <div className="flex justify-end gap-2 mt-2">
                           <button
                             onClick={() => setEditingIndex(null)}
-                            className="px-3 py-1 rounded-lg text-xs text-emerald-400 hover:text-white"
+                            className="px-3 py-1 rounded-lg text-xs text-[#A3A3A3] hover:text-[#FFFFFF]"
                           >
                             Cancel
                           </button>
                           <button
                             onClick={() => submitEdit(index)}
-                            className="px-3.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black font-semibold text-xs"
+                            className="px-3.5 py-1 rounded-lg bg-[#FFFFFF] hover:bg-[#E5E5E5] text-[#000000] font-medium text-xs"
                           >
                             Resubmit
                           </button>
@@ -308,7 +297,7 @@ export const ChatView: React.FC<ChatViewProps> = ({
                       </div>
                     ) : (
                       <div className="group relative">
-                        <div className="px-4 py-3 rounded-2xl sm:rounded-3xl bg-[#0f2117] border border-emerald-800/40 text-[#ebf3ed] text-[14.5px] sm:text-[15px] leading-relaxed shadow-md">
+                        <div className="px-4 py-2.5 rounded-2xl sm:rounded-3xl bg-[#171717] border border-[#262626] text-[#FFFFFF] text-[14.5px] leading-relaxed">
                           {msg.content}
                         </div>
 
@@ -316,8 +305,8 @@ export const ChatView: React.FC<ChatViewProps> = ({
                         {!isGenerating && (
                           <button
                             onClick={() => startEdit(index, msg.content)}
-                            className="absolute -left-8 top-1/2 -translate-y-1/2 p-1.5 rounded-lg text-emerald-500/60 hover:text-emerald-200 hover:bg-emerald-950/60 opacity-0 group-hover:opacity-100 transition-all"
-                            title="Edit message & resubmit"
+                            className="absolute -left-7 top-1/2 -translate-y-1/2 p-1 rounded-lg text-[#737373] hover:text-[#FFFFFF] hover:bg-[#141414] opacity-0 group-hover:opacity-100 transition-all"
+                            title="Edit message"
                             aria-label="Edit message"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
@@ -328,47 +317,43 @@ export const ChatView: React.FC<ChatViewProps> = ({
                   </div>
                 ) : (
                   /* Assistant Message */
-                  <div className="w-full space-y-3">
+                  <div className="w-full space-y-2.5">
                     {/* Header: Avatar, Name & Think/Search status */}
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-xl bg-gradient-to-br from-emerald-500/30 to-[#0c1811] border border-emerald-500/50 flex items-center justify-center text-emerald-400 font-bold text-xs shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-lg bg-[#141414] border border-[#262626] flex items-center justify-center text-[#FFFFFF] font-bold text-xs">
                         GH
                       </div>
-                      <span className="font-semibold text-xs text-emerald-100">
+                      <span className="font-medium text-xs text-[#FFFFFF]">
                         {assistant ? assistant.name : 'GPT Hub'}
                       </span>
 
                       {/* Think Mode Badge if reasoning was used */}
                       {msg.thinkModeUsed && (
-                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-950/70 border border-emerald-600/40 text-[10px] text-emerald-300 font-medium">
-                          <BrainCircuit className="w-3 h-3 text-emerald-400" />
-                          <span>Deep Reasoning</span>
+                        <div className="inline-flex items-center gap-1 px-2 py-0.2 rounded-full bg-[#141414] border border-[#262626] text-[10px] text-[#A3A3A3]">
+                          <BrainCircuit className="w-3 h-3 text-[#A3A3A3]" />
+                          <span>Reasoned</span>
                         </div>
                       )}
                     </div>
 
                     {/* Thinking status indicator during generation */}
                     {msg.isThinking && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-emerald-950/40 border border-emerald-800/30 text-xs text-emerald-300/90"
-                      >
-                        <div className="w-3.5 h-3.5 border-2 border-emerald-400 border-t-transparent rounded-full animate-spin flex-shrink-0" />
-                        <span className="animate-pulse">
-                          {msg.thinkingText || 'Thinking & verifying analysis...'}
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0A0A0A] border border-[#222222] text-xs text-[#A3A3A3]">
+                        <div className="w-3 h-3 border-2 border-[#FFFFFF] border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                        <span>
+                          {msg.thinkingText || 'Thinking...'}
                         </span>
-                      </motion.div>
+                      </div>
                     )}
 
                     {/* Web Search Sources Panel */}
                     {msg.sources && msg.sources.length > 0 && (
-                      <div className="my-2 p-3 rounded-2xl bg-[#09140f] border border-emerald-900/50">
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-300 mb-2">
-                          <Globe className="w-3.5 h-3.5 text-emerald-400" />
-                          <span>Verified Web Grounding Sources ({msg.sources.length})</span>
+                      <div className="my-2 p-3 rounded-xl bg-[#0A0A0A] border border-[#222222]">
+                        <div className="flex items-center gap-1.5 text-xs font-medium text-[#FFFFFF] mb-2">
+                          <Globe className="w-3.5 h-3.5 text-[#A3A3A3]" />
+                          <span>Sources ({msg.sources.length})</span>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-1.5">
                           {msg.sources.map((src, sIdx) => {
                             let domain = src.uri;
                             try {
@@ -381,14 +366,14 @@ export const ChatView: React.FC<ChatViewProps> = ({
                                 href={src.uri}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-800/40 text-[11px] text-emerald-200 transition-colors group max-w-[240px]"
+                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#141414] hover:bg-[#1C1C1C] border border-[#262626] text-[11px] text-[#D4D4D4] transition-colors group max-w-[220px]"
                                 title={src.title}
                               >
-                                <span className="font-mono text-emerald-400 font-semibold">
-                                  [{sIdx + 1}]
+                                <span className="font-mono text-[#737373] text-[10px]">
+                                  {sIdx + 1}
                                 </span>
                                 <span className="truncate">{src.title || domain}</span>
-                                <ExternalLink className="w-3 h-3 text-emerald-400/60 group-hover:text-emerald-300 flex-shrink-0" />
+                                <ExternalLink className="w-3 h-3 text-[#737373] group-hover:text-[#FFFFFF] flex-shrink-0" />
                               </a>
                             );
                           })}
@@ -406,15 +391,15 @@ export const ChatView: React.FC<ChatViewProps> = ({
                         />
                       </div>
                     ) : msg.isThinking ? null : msg.error ? (
-                      <div className="p-3.5 rounded-2xl bg-red-950/40 border border-red-500/40 text-xs text-red-200 space-y-2">
+                      <div className="p-3 rounded-xl bg-[#141414] border border-[#333333] text-xs text-[#E5E5E5] space-y-2">
                         <div className="flex items-center gap-2">
-                          <AlertTriangle className="w-4 h-4 text-red-400" />
-                          <span className="font-semibold">Generation Notice</span>
+                          <AlertCircle className="w-4 h-4 text-[#A3A3A3]" />
+                          <span className="font-medium text-[#FFFFFF]">Notice</span>
                         </div>
-                        <p>{msg.error}</p>
+                        <p className="text-[#A3A3A3]">{msg.error}</p>
                         <button
                           onClick={onRegenerate}
-                          className="px-3 py-1 rounded-lg bg-red-900/60 hover:bg-red-800/80 border border-red-500/50 text-xs text-white font-medium"
+                          className="px-3 py-1 rounded-lg bg-[#1F1F1F] hover:bg-[#262626] border border-[#333333] text-xs text-[#FFFFFF]"
                         >
                           Retry Request
                         </button>
@@ -423,18 +408,18 @@ export const ChatView: React.FC<ChatViewProps> = ({
 
                     {/* Action Bar (Copy, Speak, Regenerate, Share) */}
                     {msg.content && !isGenerating && (
-                      <div className="flex items-center gap-1 pt-1 text-emerald-400/70">
+                      <div className="flex items-center gap-1 pt-1 text-[#737373]">
                         {/* Copy Response */}
                         <button
                           onClick={() => handleCopy(msg.content, msg.id)}
-                          className="p-1.5 rounded-lg hover:text-emerald-100 hover:bg-emerald-950/60 transition-colors"
+                          className="p-1.5 rounded-lg hover:text-[#FFFFFF] hover:bg-[#141414] transition-colors"
                           title="Copy response"
                           aria-label="Copy response"
                         >
                           {copiedId === msg.id ? (
-                            <Check className="w-4 h-4 text-emerald-400" />
+                            <Check className="w-3.5 h-3.5 text-[#FFFFFF]" />
                           ) : (
-                            <Copy className="w-4 h-4" />
+                            <Copy className="w-3.5 h-3.5" />
                           )}
                         </button>
 
@@ -443,24 +428,24 @@ export const ChatView: React.FC<ChatViewProps> = ({
                           onClick={() => handleToggleSpeak(msg)}
                           className={`p-1.5 rounded-lg transition-colors ${
                             speakingMessageId === msg.id
-                              ? 'text-emerald-300 bg-emerald-500/20'
-                              : 'hover:text-emerald-100 hover:bg-emerald-950/60'
+                              ? 'text-[#FFFFFF] bg-[#222222]'
+                              : 'hover:text-[#FFFFFF] hover:bg-[#141414]'
                           }`}
                           title={
                             speakingMessageId === msg.id
-                              ? 'Stop voice playback'
-                              : 'Read response aloud'
+                              ? 'Stop voice'
+                              : 'Read aloud'
                           }
                           aria-label={
                             speakingMessageId === msg.id
-                              ? 'Stop voice playback'
-                              : 'Read response aloud'
+                              ? 'Stop voice'
+                              : 'Read aloud'
                           }
                         >
                           {speakingMessageId === msg.id ? (
-                            <VolumeX className="w-4 h-4 animate-pulse text-emerald-400" />
+                            <VolumeX className="w-3.5 h-3.5" />
                           ) : (
-                            <Volume2 className="w-4 h-4" />
+                            <Volume2 className="w-3.5 h-3.5" />
                           )}
                         </button>
 
@@ -468,22 +453,22 @@ export const ChatView: React.FC<ChatViewProps> = ({
                         {index === messages.length - 1 && (
                           <button
                             onClick={onRegenerate}
-                            className="p-1.5 rounded-lg hover:text-emerald-100 hover:bg-emerald-950/60 transition-colors"
-                            title="Regenerate response"
-                            aria-label="Regenerate response"
+                            className="p-1.5 rounded-lg hover:text-[#FFFFFF] hover:bg-[#141414] transition-colors"
+                            title="Regenerate"
+                            aria-label="Regenerate"
                           >
-                            <RotateCcw className="w-4 h-4" />
+                            <RotateCcw className="w-3.5 h-3.5" />
                           </button>
                         )}
 
                         {/* Share */}
                         <button
                           onClick={onOpenShare}
-                          className="p-1.5 rounded-lg hover:text-emerald-100 hover:bg-emerald-950/60 transition-colors"
-                          title="Share conversation"
-                          aria-label="Share conversation"
+                          className="p-1.5 rounded-lg hover:text-[#FFFFFF] hover:bg-[#141414] transition-colors"
+                          title="Share"
+                          aria-label="Share"
                         >
-                          <Share2 className="w-4 h-4" />
+                          <Share2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     )}

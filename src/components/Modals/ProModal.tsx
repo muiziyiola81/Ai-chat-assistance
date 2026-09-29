@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { X, Check, Crown, Sparkles, Zap, Shield, Globe } from 'lucide-react';
+import { X, Check, Crown } from 'lucide-react';
 
 interface ProModalProps {
   isOpen: boolean;
@@ -30,17 +30,17 @@ export const ProModal: React.FC<ProModalProps> = ({
       setTimeout(() => {
         setSuccess(false);
         onClose();
-      }, 1500);
-    }, 1200);
+      }, 1200);
+    }, 900);
   };
 
   const proFeatures = [
-    { title: 'Unlimited Think Mode Reasoning', desc: 'Deep logic and multi-step complex problem solving without throttling' },
-    { title: 'Live Web Grounding with Citations', desc: 'Real-time web search integration with verified source links' },
-    { title: '30MB High-Res File & Image Analysis', desc: 'Direct camera photos, datasets, CSVs, and spreadsheets' },
-    { title: 'Ultra-Fast Response Bandwidth', desc: 'Sub-second progressive streaming on priority infrastructure' },
-    { title: 'Custom AI Assistants & Projects', desc: 'Unlimited custom GPTs with specialized knowledge & system instructions' },
-    { title: 'Full Voice Speech Audio Generation', desc: 'High-fidelity spoken response generation with customizable voice profiles' },
+    { title: 'Unlimited Deep Reasoning Think Mode', desc: 'Extended multi-step logic and analytical problem solving without limits' },
+    { title: 'Verified Web Search Grounding', desc: 'Real-time web search integration with verified citation URLs' },
+    { title: 'High-Res Multimodal Files & Camera', desc: 'Direct camera photos, datasets, CSVs, and spreadsheets' },
+    { title: 'Priority High-Speed Streaming', desc: 'Sub-second progressive streaming on priority infrastructure' },
+    { title: 'Custom AI Assistants & Workspaces', desc: 'Create specialized GPTs with custom knowledge and system directives' },
+    { title: 'Spoken AI Voice Audio Generation', desc: 'Studio-grade text-to-speech audio with customizable voices' },
   ];
 
   return (
@@ -50,82 +50,83 @@ export const ProModal: React.FC<ProModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/85 backdrop-blur-md"
+          className="fixed inset-0 bg-black/85 backdrop-blur-sm"
         />
 
         <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 20 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 20 }}
-          transition={{ type: 'spring', damping: 25, stiffness: 320 }}
-          className="relative z-10 w-full max-w-xl bg-gradient-to-b from-[#0c1812] to-[#070d0a] border border-emerald-600/40 rounded-3xl shadow-2xl overflow-hidden flex flex-col p-6 sm:p-8"
+          initial={{ scale: 0.96, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.96, opacity: 0 }}
+          transition={{ type: 'spring', damping: 28, stiffness: 350 }}
+          className="relative z-10 w-full max-w-lg bg-[#0A0A0A] border border-[#262626] rounded-2xl shadow-2xl overflow-hidden flex flex-col p-6 sm:p-7"
         >
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 p-1.5 rounded-full text-emerald-400/80 hover:text-emerald-100 hover:bg-emerald-950/60 transition-colors"
+            className="absolute top-4 right-4 p-1 rounded-lg text-[#737373] hover:text-[#FFFFFF] hover:bg-[#171717] transition-colors"
             aria-label="Close upgrade modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
 
           {/* Header */}
-          <div className="text-center space-y-2 mb-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold">
-              <Crown className="w-3.5 h-3.5 fill-emerald-400" />
+          <div className="text-center space-y-1.5 mb-5">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#171717] border border-[#2A2A2A] text-[#FFFFFF] text-[11px] font-semibold">
+              <Crown className="w-3 h-3 fill-[#FFFFFF]" />
               <span>GPT HUB PRO</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Unlock the Full Power of Intelligence
+            <h2 className="text-xl sm:text-2xl font-bold text-[#FFFFFF] tracking-tight">
+              Upgrade Your Intelligence
             </h2>
-            <p className="text-xs sm:text-sm text-emerald-300/70 max-w-md mx-auto">
-              Get access to deep reasoning Think Mode, live web grounding, high-speed streaming, and custom assistant workspaces.
+            <p className="text-xs text-[#A3A3A3] max-w-sm mx-auto">
+              Access deep reasoning Think Mode, live web grounding, high-speed streaming, and workspaces.
             </p>
           </div>
 
           {/* Pricing Toggle */}
-          <div className="flex items-center justify-center gap-1 p-1 bg-emerald-950/60 border border-emerald-900/50 rounded-xl w-fit mx-auto mb-6">
+          <div className="flex items-center justify-center gap-1 p-1 bg-[#111111] border border-[#222222] rounded-xl w-fit mx-auto mb-5">
             <button
               onClick={() => setBillingCycle('monthly')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all ${
                 billingCycle === 'monthly'
-                  ? 'bg-emerald-500 text-black font-semibold shadow-md'
-                  : 'text-emerald-400/80 hover:text-emerald-200'
+                  ? 'bg-[#FFFFFF] text-[#000000]'
+                  : 'text-[#A3A3A3] hover:text-[#FFFFFF]'
               }`}
             >
-              $20 / Month
+              $20 / month
             </button>
             <button
               onClick={() => setBillingCycle('yearly')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1 ${
                 billingCycle === 'yearly'
-                  ? 'bg-emerald-500 text-black font-semibold shadow-md'
-                  : 'text-emerald-400/80 hover:text-emerald-200'
+                  ? 'bg-[#FFFFFF] text-[#000000]'
+                  : 'text-[#A3A3A3] hover:text-[#FFFFFF]'
               }`}
             >
-              <span>$16 / Month</span>
-              <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-400/30 text-emerald-100">
-                Save 20%
+              <span>$16 / month</span>
+              <span className="text-[10px] px-1 rounded bg-[#262626] text-[#FFFFFF]">
+                -20%
               </span>
             </button>
           </div>
 
           {/* Features Grid */}
-          <div className="space-y-3 mb-6">
+          <div className="space-y-2 mb-6">
             {proFeatures.map((feat, idx) => (
               <div
                 key={idx}
-                className="flex items-start gap-3 p-2.5 rounded-xl bg-emerald-950/20 border border-emerald-900/30"
+                className="flex items-start gap-2.5 p-2.5 rounded-xl bg-[#111111] border border-[#222222]"
               >
-                <div className="p-1 rounded-md bg-emerald-500/20 text-emerald-400 flex-shrink-0 mt-0.5">
-                  <Check className="w-3.5 h-3.5 stroke-[3]" />
+                <div className="p-0.5 rounded bg-[#171717] border border-[#2A2A2A] text-[#FFFFFF] flex-shrink-0 mt-0.5">
+                  <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 </div>
                 <div>
-                  <div className="text-xs font-semibold text-emerald-100">
+                  <div className="text-xs font-medium text-[#FFFFFF]">
                     {feat.title}
                   </div>
-                  <div className="text-[11px] text-emerald-400/60 leading-tight">
+                  <div className="text-[11px] text-[#737373] leading-tight">
                     {feat.desc}
                   </div>
                 </div>
@@ -135,36 +136,36 @@ export const ProModal: React.FC<ProModalProps> = ({
 
           {/* Action Button */}
           {isPro ? (
-            <div className="p-3 rounded-xl bg-emerald-950/40 border border-emerald-700/50 text-emerald-300 text-center text-xs font-medium">
-              You are currently on the GPT Hub Pro Plan. Thank you for your support!
+            <div className="p-3 rounded-xl bg-[#141414] border border-[#262626] text-[#FFFFFF] text-center text-xs font-medium">
+              You are currently on the Pro plan.
             </div>
           ) : (
             <button
               onClick={handleUpgrade}
               disabled={upgrading || success}
-              className="w-full py-3.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-75 text-black font-bold text-sm shadow-[0_0_25px_rgba(16,185,129,0.35)] transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+              className="w-full py-2.5 px-4 rounded-xl bg-[#FFFFFF] hover:bg-[#E5E5E5] disabled:opacity-50 text-[#000000] font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
             >
               {success ? (
                 <>
-                  <Check className="w-4 h-4 stroke-[3]" />
-                  <span>Welcome to GPT Hub Pro!</span>
+                  <Check className="w-4 h-4 stroke-[2.5]" />
+                  <span>Upgraded to Pro</span>
                 </>
               ) : upgrading ? (
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                  <span>Upgrading Account...</span>
+                  <div className="w-3.5 h-3.5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                  <span>Processing...</span>
                 </div>
               ) : (
                 <>
-                  <Crown className="w-4 h-4 fill-black" />
-                  <span>Upgrade to Pro Now</span>
+                  <Crown className="w-3.5 h-3.5 fill-[#000000]" />
+                  <span>Upgrade to Pro</span>
                 </>
               )}
             </button>
           )}
 
-          <div className="text-center text-[10px] text-emerald-500/50 mt-3">
-            Secure checkout • Instant activation • Cancel anytime with one click
+          <div className="text-center text-[10px] text-[#666666] mt-2.5">
+            Instant activation • Cancel anytime
           </div>
         </motion.div>
       </div>
